@@ -52,7 +52,7 @@ def fetchxml():
         }
     }
     '''
-    with open('testdata\\vulnerabilities.xml', 'r') as file:
+    with open('testdata/vulnerabilities.xml', 'r') as file:
         xml_data = file.read()
     xml_data = re.sub(r'\n', ' ', xml_data)
     xml_data = re.sub(r'\s{2,}', ' ', xml_data)

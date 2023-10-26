@@ -172,7 +172,7 @@ def doupload():
     else:
         return "no Authenticated"
     
-@app.route('/dovulfech', methods=['GET','POST'])
+@app.route('/dovulfetch', methods=['GET','POST'])
 # Return The JSON Format Data to Frontend
 def dovulfech():
     if 'user_id' in session:
