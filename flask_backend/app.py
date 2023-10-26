@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 from check import perform_code_check, perform_security_check
+from common import fetchxml
 
 app = Flask(__name__)
 app.secret_key = '123456'  # 设置会话密钥
@@ -170,6 +171,23 @@ def doupload():
             return "File upload failed!"
     else:
         return "no Authenticated"
+    
+@app.route('/dovulfech', methods=['GET','POST'])
+# Return The JSON Format Data to Frontend
+def dovulfech():
+    if 'user_id' in session:
+        return jsonify(fetchxml())
+    else:
+        return "no Authenticated"
+
+
+@app.route('/magicsession', methods=['GET'])
+def magicsession():
+    session['user_id'] = 2
+    data = {}
+    data['status'] = 1
+    data['message'] = 'Authenticated'
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(threaded = True)
