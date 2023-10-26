@@ -23,27 +23,27 @@ def fetchxml():
     '''
     This function will output A JSON format result of the vulnerabilities.
     {
-        "s938e2zz1ybo": {
-            "extension": "        4    ",
-            "file": "        5    ",
-            "framework": "        Spring    ",
-            "language": "        php    ",
-            "push_rules": "        17    ",
-            "target_directory": "        C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/    ",
-            "trigger_rules": "        13    ",
-            "vulnerabilities": {
-                "vul": [
-                    {
-                        "analysis": "            Function-param-controllable        ",
-                        "chain": "                    ",
-                        "code_content": "            print(\"Hello \" . $cmd);        ",
-                        "commit_author": "            JANNEY W        ",
-                        "file_path": "            C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php        ",
-                        "id": "            1000        ",
-                        "language": "            PHP        ",
-                        "line_number": "            60        ",
-                        "rule_name": "            Reflected XSS        "
-                    },
+    "s938e2zz1ybo": {
+        "extension": " 4 ",
+        "file": " 5 ",
+        "framework": " Spring ",
+        "language": " php ",
+        "push_rules": " 17 ",
+        "target_directory": " C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/ ",
+        "trigger_rules": " 13 ",
+        "vulnerabilities": {
+            "vul": [
+                {
+                    "analysis": " Function-param-controllable ",
+                    "chain": " ",
+                    "code_content": " print(\"Hello \" . $cmd); ",
+                    "commit_author": " JANNEY W ",
+                    "file_path": " C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php ",
+                    "id": " 1000 ",
+                    "language": " PHP ",
+                    "line_number": " 60 ",
+                    "rule_name": " Reflected XSS "
+                },
                     ...
                     
                 ]
@@ -60,7 +60,7 @@ def fetchxml():
     xml_dict = xml_to_dict(root)
 
     json_data = json.dumps(xml_dict, indent=4)
-    print(json_data)
+    #print(json_data)
     return(xml_dict)
 
 #fetchxml()
