@@ -1,11 +1,14 @@
 import React,{useState} from 'react';
 import {Button,Checkbox,Select,Radio,Switch,Form,Row,Col,Icon,Modal,Input,InputNumber,Cascader,Tooltip,Upload,Divider } from 'antd';
-
+import axios from 'axios';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 
 class AformInModal extends React.Component {
+
+    temp_data
+
     constructor(props) {
         super(props);
         this.state = { 
@@ -15,25 +18,37 @@ class AformInModal extends React.Component {
     }
     // 单击确定按钮提交表单
     handleSubmit = () => {
+        this.temp_data = this.props.form.getFieldsValue()
         console.log(this.props.form.getFieldsValue());
         this.setState({ visible: false });
-        let file1 = document.querySelector('#input').files[0]
-        let formdata = new FormData()
-        formdata.append("file", file1)  
-        console.log(formdata) 
-        // Axios({
-        //     url:'/api/importExcel',
-        //     method: 'post',
-        //     headers:{'Content-Type':'multipart/form-data'},
-        //     data:formdata
-        // }).then(
-        //     request =>{
-        //         console.log(request.data)
-        //     },
-        //     error =>{
-        //         console.log(error.data)
-        //     }
-        // )
+        console.log("打印测试",this.temp_data) 
+        //保护代码 避免空数据继续执行
+        if(!this.temp_data){
+            console.log("tempdata为空")
+            return
+        }
+        const formdata = {
+            
+            entry_target_get: this.temp_data.logName,
+            entry_ruleid_get: this.temp_data.specialRule,
+            entry_secret_get: this.temp_data.secretName,
+            get_format: this.temp_data.logName,
+            entry_logname_get: this.temp_data.logName,
+          };
+        console.log("formdata",formdata)
+        axios({
+            url:'/api/importExcel',//
+            method: 'post',
+            // data:formdata
+            data:formdata
+        }).then(
+            request =>{
+                console.log("requset"+request.data)
+            },
+            error =>{
+                console.log("error"+ error)
+            }
+        )
     }
     // 弹出框设置
     showModal = () => {
