@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Link, IndexLink } from 'react-router';
 
 // 引入Antd组件
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, MenuItem } from 'antd';
 const SubMenu = Menu.SubMenu;
 
 export default class Sidebar extends React.Component {
@@ -40,7 +40,10 @@ export default class Sidebar extends React.Component {
                     mode="inline">
                     <Menu.Item key="1">                    
                         <IndexLink to="/"><span><Icon type="home" /><span>欢迎页</span></span></IndexLink>
-                    </Menu.Item>    
+                    </Menu.Item>
+                    <SubMenu key="sub7" title={<span><Icon type="appstore-o" /><span>PHP代码检测</span></span>}>
+                        <Menu.Item key="7"><Link to="/tool">小应用</Link></Menu.Item>
+                    </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="appstore-o" /><span>导航一</span></span>}>
                         <Menu.Item key="2"><Link to="/profile">小应用</Link></Menu.Item>
                     </SubMenu>
