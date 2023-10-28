@@ -5,7 +5,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import draftToHtml from 'draftjs-to-html'
 import draftToMarkdown from 'draftjs-to-markdown'
 // import './index.less'
-import BtnForm from './popup.jsx';
+import BtnForm from './codeinputpopup.jsx';
 
 const rawContentState = {
   entityMap: {

@@ -1,20 +1,39 @@
-import React from 'react';
-import {Button,Checkbox,Select,Radio,Switch,Form,Row,Col,Icon,Modal,Input,InputNumber,Cascader,Tooltip } from 'antd';
+import React,{useState} from 'react';
+import {Button,Checkbox,Select,Radio,Switch,Form,Row,Col,Icon,Modal,Input,InputNumber,Cascader,Tooltip,Upload,Divider } from 'antd';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
 
 class AformInModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            visible: false,           
+            visible: false,  
+                    
         }        
     }
     // 单击确定按钮提交表单
     handleSubmit = () => {
         console.log(this.props.form.getFieldsValue());
         this.setState({ visible: false });
+        let file1 = document.querySelector('#input').files[0]
+        let formdata = new FormData()
+        formdata.append("file", file1)  
+        console.log(formdata) 
+        // Axios({
+        //     url:'/api/importExcel',
+        //     method: 'post',
+        //     headers:{'Content-Type':'multipart/form-data'},
+        //     data:formdata
+        // }).then(
+        //     request =>{
+        //         console.log(request.data)
+        //     },
+        //     error =>{
+        //         console.log(error.data)
+        //     }
+        // )
     }
     // 弹出框设置
     showModal = () => {
@@ -29,18 +48,20 @@ class AformInModal extends React.Component {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
         };
-        const areaData = [{
-            value: 'audi',
-            label: '奥迪',
-            children: [{
-                value: 'a6',
-                label: 'AudiA6',                
-            },{
-                value: 'a8',
-                label: 'AudiA8',                
-            }],
-        }];
+        
+        // const uploadProps={
+        //     showUploadList: true,
+        //     beforeUpload:file=>{
+        //         console.log(file)
+        //         return false;
+        //     },
+            
+        // };
+
         const { getFieldProps } = this.props.form;
+        const plainOptions = ['csv', 'xml'];
+        const defaultCheckedList = ['csv'];
+        const ShowField=false;
 
         return (
             <div>
@@ -55,14 +76,23 @@ class AformInModal extends React.Component {
                         </FormItem>
                       
                          <Form.Item {...formItemLayout} label="Result Format：">
-                            
-                                    <Checkbox key="a" value="csv">Save as csv</Checkbox>
-                                    <Checkbox key="b" value="xml">Save as xml</Checkbox>
+                         <CheckboxGroup options={plainOptions} />
+                                   
                           
                         </Form.Item>
                         <FormItem {...formItemLayout} label="Secret Name：">
                             <Input type="text" {...getFieldProps('secretName')}/>
                         </FormItem>
+
+                    {ShowField&&(
+                        <FormItem {...formItemLayout} label="File：">
+                            {/* <Upload >
+                            <Button>
+                                <Icon type="upload" />Upload File
+                            </Button>
+                            </Upload> */}
+                            <Input type="file" {...getFieldProps('file')}/>
+                        </FormItem>)}
                         {/* <FormItem {...formItemLayout} label="Upload File：">
                             <Input type="file" {...getFieldProps('fileName')}/>
                         </FormItem> */}
