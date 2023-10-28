@@ -19,9 +19,11 @@ class AformInModal extends React.Component {
     // 单击确定按钮提交表单
     handleSubmit = () => {
         this.temp_data = this.props.form.getFieldsValue()
-        console.log(this.props.form.getFieldsValue());
+        console.log("检测",this.temp_data);
         this.setState({ visible: false });
         console.log("打印测试",this.temp_data) 
+        let fileData = new FormData()
+        fileData.append('file', this.temp_data.file.raw)// 传文件
         //保护代码 避免空数据继续执行
         if(!this.temp_data){
             console.log("tempdata为空")
@@ -29,7 +31,7 @@ class AformInModal extends React.Component {
         }
         const formdata = {
             
-            entry_target_get: this.temp_data.logName,
+            entry_target_get: fileData,
             entry_ruleid_get: this.temp_data.specialRule,
             entry_secret_get: this.temp_data.secretName,
             get_format: this.temp_data.logName,
