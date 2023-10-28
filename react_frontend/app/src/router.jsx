@@ -8,6 +8,7 @@ const history = createHistory();
 import Init from './main.jsx';
 import Welcome from './welcome/welcome.jsx';
 import Profile from './profile/profile.jsx';
+import Tool from './tool/tool.jsx';
 import Campaign from './campaign/campaign.jsx';
 import Edit from './edit/edit.jsx';
 import Counter from './counter/counter.jsx';
@@ -23,6 +24,7 @@ ReactDOM.render(
         <Route path="/" component={Init} >
             <IndexRoute component={Welcome}/>
             <Route path="profile" component={Profile} />
+            <Route path="tool" component={Tool} />
             <Route path="campaign" component={Campaign} />
             <Route path="counter" component={Counter} />
             <Route path="charts" component={Charts} />
