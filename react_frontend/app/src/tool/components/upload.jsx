@@ -1,32 +1,54 @@
-import React from 'react';
-import {Input,Row,Col,DatePicker} from 'antd';
+import React,{useState} from 'react';
+import {Input,Row,Col,DatePicker, Button, Upload, Icon} from 'antd';
 
-import BtnForm from './popup.jsx';
+import BtnForm from './fileuploadpopup.jsx';
 
 /* 精确年龄计算器组件 */
-export default class Age extends React.Component {
+export default class FileUploader extends React.Component {
   	constructor(props) {
         super(props);
         this.state = {
             output:''
         }       
-    } 
-
-    // 选择日期范围
-    dateChange = (v) => {
-        let now = (new Date()).toDateString();
-        let msGap = (new Date(now)).getTime() - (new Date(v.toDateString())).getTime();
-        let trueAge = (msGap/1000/60/60/24/365.242199).toFixed(2);
-        this.setState({output: trueAge});
     }
+
+   beforeUpload=(file)=>{
+    console.log(file)
+    return false;
+
+   }
+   fileinputChange = (event) =>{
+    const fileData = event.target.files[0];
+    console.log(fileData)
+    // 获取到的文件 fileData
+    // if(fileData){
+    //   this.setState({ fileData, })
+    //   const formdata = new FormData();
+    //   formdata.append("wordType",3);
+    //   formdata.append("file",fileData);
+    //   this.send(formdata)
+    // }
+   }
+   
+    
      
     render() {          
         return (
             <div style={{marginTop:80}}> 
-            <form action="http://127.0.0.1:3001/file/upload" method="post" enctype="multipart/form-data">
-                    <input type="file" name='file'/>
-            </form>
-            <BtnForm />  
+
+
+          {/* <Upload beforeUpload={(file)=>this.beforeUpload(file)} >
+
+            <Button>
+                <Icon type='upload'/>Add File
+
+            </Button>
+            <span className='upload-span'> support format: txt.......</span>
+          </Upload> */}
+        {/* <input id="file" type="file" onChange={this.fileinputChange}/>
+        <button onClick={this.getFiles}>上传</button> */}
+      
+            <BtnForm/>  
                 {/* <Row type="flex" justify="center">
                     <Col span={7}>    
                         <label style={{fontSize:14}}>您的出生日期：&nbsp;&nbsp;</label>
