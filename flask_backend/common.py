@@ -1,6 +1,7 @@
 import re
 import json
 import xml.etree.ElementTree as ET
+from staticCodeDector import staticCodeDetect
 
 def xml_to_dict(element):
     result = {}
@@ -52,7 +53,9 @@ def fetchxml():
         }
     }
     '''
-    with open('testdata/vulnerabilities.xml', 'r') as file:
+    staticCodeDetect(r'tests',r'E:\\workspace\\A-8-Software-engineer\\flask_backend\\vul.xml')
+    
+    with open('vul.xml', 'r') as file:
         xml_data = file.read()
     xml_data = re.sub(r'\n', ' ', xml_data)
     xml_data = re.sub(r'\s{2,}', ' ', xml_data)
@@ -63,4 +66,4 @@ def fetchxml():
     #print(json_data)
     return(xml_dict)
 
-#fetchxml()
+fetchxml()
