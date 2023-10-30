@@ -1,0 +1,184 @@
+[INFO] [MainThread] [2023-10-24 18:08:11,336] [utils.py:65] [INIT][PARSE_ARGS] Language is ['php']
+[INFO] [MainThread] [2023-10-24 18:08:11,336] [cli.py:53] [CLI] Target : C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/
+[INFO] [MainThread] [2023-10-24 18:08:11,340] [cli.py:65] [CLI] [STATISTIC] Language: php Framework: Spring
+[INFO] [MainThread] [2023-10-24 18:08:11,340] [cli.py:66] [CLI] [STATISTIC] Files: 5, Extensions:4, Consume: 0.0
+[INFO] [MainThread] [2023-10-24 18:08:11,527] [engine.py:170] [PUSH] 17 Rules
+[INFO] [MainThread] [2023-10-24 18:08:11,527] [engine.py:287] [!] Start scan [CVI-1000]
+[INFO] [MainThread] [2023-10-24 18:08:11,536] [engine.py:287] [!] Start scan [CVI-10001]
+[INFO] [MainThread] [2023-10-24 18:08:11,540] [cast.py:233] [AST] can't find this param, Unconfirmed vulnerable..
+[INFO] [MainThread] [2023-10-24 18:08:11,540] [engine.py:287] [!] Start scan [CVI-1001]
+[INFO] [MainThread] [2023-10-24 18:08:11,540] [parser.py:756] [Deep AST] Now vulnerability function from function curl() param $url
+[INFO] [MainThread] [2023-10-24 18:08:11,544] [cast.py:215] [AST] New vul function curl()
+[INFO] [MainThread] [2023-10-24 18:08:11,544] [engine.py:287] [!] Start scan [CVI-1002]
+[INFO] [MainThread] [2023-10-24 18:08:11,548] [engine.py:287] [!] Start scan [CVI-1003]
+[INFO] [MainThread] [2023-10-24 18:08:11,552] [engine.py:287] [!] Start scan [CVI-1004]
+[INFO] [MainThread] [2023-10-24 18:08:11,559] [cast.py:233] [AST] can't find this param, Unconfirmed vulnerable..
+[INFO] [MainThread] [2023-10-24 18:08:11,561] [cast.py:233] [AST] can't find this param, Unconfirmed vulnerable..
+[INFO] [MainThread] [2023-10-24 18:08:11,564] [engine.py:287] [!] Start scan [CVI-1005]
+[INFO] [MainThread] [2023-10-24 18:08:11,568] [engine.py:287] [!] Start scan [CVI-1006]
+[INFO] [MainThread] [2023-10-24 18:08:11,568] [engine.py:287] [!] Start scan [CVI-1007]
+[INFO] [MainThread] [2023-10-24 18:08:11,572] [engine.py:287] [!] Start scan [CVI-1008]
+[INFO] [MainThread] [2023-10-24 18:08:11,576] [engine.py:287] [!] Start scan [CVI-1009]
+[INFO] [MainThread] [2023-10-24 18:08:11,580] [engine.py:287] [!] Start scan [CVI-1010]
+[INFO] [MainThread] [2023-10-24 18:08:11,580] [engine.py:287] [!] Start scan [CVI-1011]
+[INFO] [MainThread] [2023-10-24 18:08:11,584] [engine.py:287] [!] Start scan [CVI-1012]
+[INFO] [MainThread] [2023-10-24 18:08:11,585] [engine.py:287] [!] Start scan [CVI-1013]
+[INFO] [MainThread] [2023-10-24 18:08:11,585] [engine.py:287] [!] Start scan [CVI-1014]
+[INFO] [MainThread] [2023-10-24 18:08:11,588] [engine.py:287] [!] Start scan [CVI-1015]
+[INFO] [MainThread] [2023-10-24 18:08:11,593] [engine.py:232] [SCAN] Trigger Rules: 13 Vulnerabilities (19)
++----+-------+-------------------------+-------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------+-----------------------------------------+
+| #  | CVI   | Rule(ID/Name)           | Lang/CVE-id | Target-File:Line-Number                                                                         | Source Code Content                                | Analysis                                |
++----+-------+-------------------------+-------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------+-----------------------------------------+
+| 1  | 1000  | Reflected XSS           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:60       | print("Hello " . $cmd);                            | Function-param-controllable             |
+| 2  | 1000  | Reflected XSS           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v_parser.php:7 | print(system(trim('ping'.$_GET                     | Function-param-controllable             |
+| 3  | 10001 | Reflected XSS           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:10       | echo($callback . ";");                             | Vustomize-Match                         |
+| 4  | 10001 | Reflected XSS           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:54       | echo get_headers($url,1);                          | Vustomize-Match                         |
+| 5  | 10001 | Reflected XSS           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:124      | echo "a".$a;                                       | Vustomize-Match                         |
+| 6  | 1001  | Auto rule               | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:44       | curl(esc_url($cmd));                               | Vustomize-Match                         |
+| 7  | 1002  | SSRF                    | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:49       | $content = file_get_contents($url);                | Function-param-controllable             |
+| 8  | 1003  | SSRF                    | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:54       | echo get_headers($url,1);                          | Function-param-controllable             |
+| 9  | 1004  | SQLI                    | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:69       | $query = "select id, xxx from users where name = $ | Vustomize-Match                         |
+| 10 | 1004  | SQLI                    | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:79       | $query2 = "select name from users where id =$id";  | Vustomize-Match                         |
+| 11 | 1007  | RFI                     | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:83       | require_once($cmd);                                | Function-param-controllable             |
+| 12 | 1008  | Xml injection           | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:104      | $data = simplexml_load_string($xml);               | Function-param-controllable             |
+| 13 | 1009  | RCE                     | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:19       | eval($cmd);                                        | Function-param-controllable             |
+| 14 | 1011  | RCE                     | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:20       | system('ls' + $cmd);                               | Function-param-controllable             |
+| 15 | 1011  | RCE                     | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v_parser.php:7 | print(system(trim('ping'.$_GET                     | Function-param-controllable             |
+| 16 | 1013  | URL Redirector Abuse    | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:97       | header("Location: ".esc_url($url));                | Function-param-controllable             |
+| 17 | 1014  | variable shadowing      | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:12       | extract($cmd);                                     | Function-param-controllable             |
+| 18 | 1014  | variable shadowing      | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:106      | parse_str($_SERVER['QUERY_STRING']);               | Unconfirmed Function-param-controllable |
+| 19 | 1015  | unserialize vulerablity | PHP         | C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php:101      | $test_uns = unserialize($test);                    | Function-param-controllable             |
++----+-------+-------------------------+-------------+-------------------------------------------------------------------------------------------------+----------------------------------------------------+-----------------------------------------+
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:237] [SCAN] Vulnerabilities Chain list: 
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:239] [SCAN] Vul 1
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] ('NewScan', 'Code: print("Hello " . $cmd);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '60')
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 60)
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] ('Assignment', '$cmd=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 58)
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:239] [SCAN] Vul 2
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,605] [engine.py:241] [Chain] ('NewScan', "Code: print(system(trim('ping'.$_GET['test'])));\n", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v_parser.php', '7')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$_GET')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v_parser.php', 7)
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:239] [SCAN] Vul 3
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewScan', 'Code: echo($callback . ";");\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '10')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$callback')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '10')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('Assignment', '$callback=$_POST', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 4)
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:239] [SCAN] Vul 4
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewScan', 'Code: echo get_headers($url,1);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '54')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$url')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '54')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('Assignment', '$url=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 52)
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:239] [SCAN] Vul 5
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewScan', 'Code: echo "a".$a;\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '124')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$a')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '124')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('Assignment', '$a=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 123)
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:239] [SCAN] Vul 6
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewScan', 'Code:     curl(esc_url($cmd));\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '44')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '44')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('Assignment', '$cmd=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 16)
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:239] [SCAN] Vul 7
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewScan', 'Code: $content = file_get_contents($url);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '49')
+[INFO] [MainThread] [2023-10-24 18:08:11,606] [engine.py:241] [Chain] ('NewFind', "find param Variable('$url')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 49)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$url=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 47)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 8
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: echo get_headers($url,1);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '54')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$url')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 54)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$url=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 52)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 9
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: $query = "select id, xxx from users where name = $test";\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '69')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$test')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '69')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$test=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 68)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 10
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: $query2 = "select name from users where id =$id";\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '79')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$id')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '79')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$id=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 76)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 11
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: require_once($cmd);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '83')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 83)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$cmd=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 58)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 12
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: $data = simplexml_load_string($xml);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '104')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$xml')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 104)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$xml=$_POST', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 103)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 13
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', 'Code: eval($cmd);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '19')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 19)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$cmd=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 16)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 14
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', "Code: system('ls' + $cmd);\n", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '20')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 20)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('Assignment', '$cmd=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 16)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 15
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewScan', "Code: print(system(trim('ping'.$_GET['test'])));\n", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v_parser.php', '7')
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:241] [Chain] ('NewFind', "find param Variable('$_GET')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v_parser.php', 7)
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,621] [engine.py:239] [SCAN] Vul 16
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('NewScan', 'Code: header("Location: ".esc_url($url));\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '97')
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('NewFind', "find param Variable('$url')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 97)
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('Assignment', '$url=$_GET', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 94)
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:239] [SCAN] Vul 17
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('NewScan', 'Code: extract($cmd);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '12')
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('NewFind', "find param Variable('$cmd')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 12)
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('Assignment', '$cmd=$_REQUEST', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 8)
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:239] [SCAN] Vul 18
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:241] [Chain] ('NewScan', "Code: parse_str($_SERVER['QUERY_STRING']);\n", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '106')
+[INFO] [MainThread] [2023-10-24 18:08:11,626] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:239] [SCAN] Vul 19
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:241] [Chain] start
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:241] [Chain] ('NewScan', 'Code: $test_uns = unserialize($test);\n', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', '101')
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:241] [Chain] ('NewFind', "find param Variable('$test')", 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php', 101)
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:241] [Chain] ('Assignment', '$test=$_POST', 'C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities\\v.php', 100)
+[INFO] [MainThread] [2023-10-24 18:08:11,634] [engine.py:245] [SCAN] ending
+-
+[INFO] [MainThread] [2023-10-24 18:08:11,638] [export.py:100] [EXPORT] No filename given, save into default path(result/).
+[INFO] [MainThread] [2023-10-24 18:08:11,642] [export.py:166] [EXPORT] Scan result exported successfully: C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\result/vulnerabilities.xml
+[INFO] [MainThread] [2023-10-24 18:08:11,642] [__init__.py:87] [INIT] Done! Consume Time:62.56153750419617s
