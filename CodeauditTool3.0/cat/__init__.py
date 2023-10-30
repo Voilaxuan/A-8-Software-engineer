@@ -21,6 +21,18 @@ try:
 except NameError as e:
     pass
 
+def run_codeDector(detectFile, outputFile, format = 'xml', ruleid='', secretName=''):
+    logger.debug('[INIT] start scanning...')
+    a_sid = get_sid(detectFile, True)  # 用于区分不同的扫描项目
+
+    data = {
+        'status': 'running',
+        'report': ''
+    }
+    Running(a_sid).status(data)  # 实例化Running类
+
+    # cli.start(args.target, args.format, args.output, args.special_rules, a_sid, 'php', args.secret_name, args.black_path)
+    cli.start(detectFile, format, outputFile, ruleid, a_sid, 'php,', secretName, '')
 
 def main():
     try:
@@ -58,21 +70,17 @@ def main():
                  font=('Arial', 13)).place(x=50, y=380)
 
         def start_scan():
-            entry_targe_get = entry_targe.get()
-            entry_ruleid_get = entry_ruleid.get()
-            entry_secret_get = entry_secret.get()
-            entry_logname_get = entry_logname.get()
-            if entry_logname_get:
-                log(logging.INFO, entry_logname_get)
+            if entry_logname.get():
+                log(logging.INFO, entry_logname.get())
             else:
                 log(logging.INFO, str(time.time()))
 
-            if entry_targe_get=='':
+            if entry_targe.get()=='':
                 tk.messagebox.showerror(title='Tip',message='The target should not be null.')
             else:
 
                 logger.debug('[INIT] start scanning...')
-                a_sid = get_sid(entry_targe_get, True)  # 用于区分不同的扫描项目
+                a_sid = get_sid(entry_targe.get(), True)  # 用于区分不同的扫描项目
 
                 data = {
                     'status': 'running',
@@ -81,7 +89,7 @@ def main():
                 Running(a_sid).status(data)  # 实例化Running类
 
                 # cli.start(args.target, args.format, args.output, args.special_rules, a_sid, 'php', args.secret_name, args.black_path)
-                cli.start(entry_targe_get, get_format, '', entry_ruleid_get, a_sid, 'php,', entry_secret_get, '')
+                cli.start(entry_targe.get(), get_format, '', entry_ruleid.get(), a_sid, 'php,', entry_secret.get(), '')
 
                 t2 = time.time()
                 logger.info('[INIT] Done! Consume Time:{ct}s'.format(ct=t2 - t1))
@@ -111,7 +119,6 @@ def main():
         entry_ruleid = tk.Entry(window, show=None)
         entry_ruleid.place(x=540, y=210, width=250, height=30)
 
-
         result_format = tk.StringVar()
 
         tk.Label(window,
@@ -131,17 +138,14 @@ def main():
         entry_secret = tk.Entry(window, show=None)
         entry_secret.place(x=540, y=360, width=250, height=30)
 
-
         tk.Label(window,
                  text='log name (optional)'
                  , font=('Arial', 13)).place(x=540, y=410)
         entry_logname = tk.Entry(window, show=None)
         entry_logname.place(x=540, y=440, width=250, height=30)
 
-
         scan_button = tk.Button(window, text='scan', width=8, height=1, command=start_scan)
         scan_button.place(x=820, y=110)
-
 
         window.mainloop()
 
