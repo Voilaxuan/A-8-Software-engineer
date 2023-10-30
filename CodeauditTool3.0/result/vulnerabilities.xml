@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results>
+<s938e2zz1ybo>
+    <extension>
+        4
+    </extension>
+    <file>
+        5
+    </file>
+    <framework>
+        Spring
+    </framework>
+    <language>
+        php
+    </language>
+    <push_rules>
+        17
+    </push_rules>
+    <target_directory>
+        C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/
+    </target_directory>
+    <trigger_rules>
+        13
+    </trigger_rules>
+    <vulnerabilities>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            print(&quot;Hello &quot; . $cmd);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1000
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            60
+        </line_number>
+        <rule_name>
+            Reflected XSS
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                                print(system(trim(&#x27;ping&#x27;.$_GET[&#x27;test&#x27;])));
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v_parser.php
+        </file_path>
+        <id>
+            1000
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            7
+        </line_number>
+        <rule_name>
+            Reflected XSS
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            echo($callback . &quot;;&quot;);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            10001
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            10
+        </line_number>
+        <rule_name>
+            Reflected XSS
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                echo get_headers($url,1);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            10001
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            54
+        </line_number>
+        <rule_name>
+            Reflected XSS
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            echo &quot;a&quot;.$a;
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            10001
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            124
+        </line_number>
+        <rule_name>
+            Reflected XSS
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                curl(esc_url($cmd));
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1001
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            44
+        </line_number>
+        <rule_name>
+            Auto rule
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                $content = file_get_contents($url);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1002
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            49
+        </line_number>
+        <rule_name>
+            SSRF
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                echo get_headers($url,1);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1003
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            54
+        </line_number>
+        <rule_name>
+            SSRF
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            $query = &quot;select id, xxx from users where name = $test&quot;;
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1004
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            69
+        </line_number>
+        <rule_name>
+            SQLI
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Vustomize-Match
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            $query2 = &quot;select name from users where id =$id&quot;;
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1004
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            79
+        </line_number>
+        <rule_name>
+            SQLI
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                require_once($cmd);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1007
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            83
+        </line_number>
+        <rule_name>
+            RFI
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            $data = simplexml_load_string($xml);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1008
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            104
+        </line_number>
+        <rule_name>
+            Xml injection
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                eval($cmd);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1009
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            19
+        </line_number>
+        <rule_name>
+            RCE
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                system(&#x27;ls&#x27; + $cmd);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1011
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            20
+        </line_number>
+        <rule_name>
+            RCE
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                                print(system(trim(&#x27;ping&#x27;.$_GET[&#x27;test&#x27;])));
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v_parser.php
+        </file_path>
+        <id>
+            1011
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            7
+        </line_number>
+        <rule_name>
+            RCE
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+                header(&quot;Location: &quot;.esc_url($url));
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1013
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            97
+        </line_number>
+        <rule_name>
+            URL Redirector Abuse
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            extract($cmd);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1014
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            12
+        </line_number>
+        <rule_name>
+            variable shadowing
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            parse_str($_SERVER[&#x27;QUERY_STRING&#x27;]);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1014
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            106
+        </line_number>
+        <rule_name>
+            variable shadowing
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            $test_uns = unserialize($test);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\Lenovo\Desktop\Soft_Engi\project\CodeauditTool3.0\tests\vulnerabilities/v.php
+        </file_path>
+        <id>
+            1015
+        </id>
+        <language>
+            PHP
+        </language>
+        <line_number>
+            101
+        </line_number>
+        <rule_name>
+            unserialize vulerablity
+        </rule_name>
+    </vul>
+    </vulnerabilities>
+    <target>
+        tests/vulnerabilities
+    </target>
+</s938e2zz1ybo>
+</results>
