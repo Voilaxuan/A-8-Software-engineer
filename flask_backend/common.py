@@ -23,17 +23,17 @@ def xml_to_dict(element):
 
 
 def codedetect():
-    run_codeDector(r'E:\\workspace\\flask_backend\\tests',r'E:\\workspace\\flask_backend\\vul.xml', 'xml', '', '')
+    run_codeDector('./tests','./vul.xml', 'xml', '', '')
     return True
 
 def fetchxml():
-    with open(r'E:\\workspace\\flask_backend\\vul.xml', 'r') as file:
+    with open('./vul.xml', 'r') as file:
             xml_data = file.read()
     xml_data = re.sub(r'\n', ' ', xml_data)
     xml_data = re.sub(r'\s{2,}', ' ', xml_data)
     root = ET.fromstring(xml_data)
     xml_dict = xml_to_dict(root)
-    os.remove(r'E:\\workspace\\flask_backend\\vul.xml') 
+    os.remove('./vul.xml')
     json_data = json.dumps(xml_dict, indent=4)
     #print(json_data)   
     return(xml_dict)

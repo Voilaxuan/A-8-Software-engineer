@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 from check import perform_code_check, perform_security_check
-from common import fetchxml, codedetect,seq
+from common import fetchxml, codedetect
 from multiprocessing import Pool
 import time
 

@@ -1,0 +1,1 @@
+{"code": 1001, "msg": "scan finished", "result": {"extension": 1, "file": 1, "framework": "Unknown Framework", "language": "php", "push_rules": 17, "target_directory": "tests/cloc.php", "trigger_rules": 0, "vulnerabilities": []}}
