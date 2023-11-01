@@ -1,7 +1,9 @@
 import re
 import json
 import xml.etree.ElementTree as ET
-from staticCodeDector import staticCodeDetect
+from cat import run_codeDector
+import os
+import multiprocessing as mp
 
 def xml_to_dict(element):
     result = {}
@@ -20,50 +22,20 @@ def xml_to_dict(element):
 
 
 
+def codedetect():
+    run_codeDector(r'E:\\workspace\\flask_backend\\tests',r'E:\\workspace\\flask_backend\\vul.xml', 'xml', '', '')
+    return True
+
 def fetchxml():
-    '''
-    This function will output A JSON format result of the vulnerabilities.
-    {
-    "s938e2zz1ybo": {
-        "extension": " 4 ",
-        "file": " 5 ",
-        "framework": " Spring ",
-        "language": " php ",
-        "push_rules": " 17 ",
-        "target_directory": " C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/ ",
-        "trigger_rules": " 13 ",
-        "vulnerabilities": {
-            "vul": [
-                {
-                    "analysis": " Function-param-controllable ",
-                    "chain": " ",
-                    "code_content": " print(\"Hello \" . $cmd); ",
-                    "commit_author": " JANNEY W ",
-                    "file_path": " C:\\Users\\Lenovo\\Desktop\\Soft_Engi\\project\\CodeauditTool3.0\\tests\\vulnerabilities/v.php ",
-                    "id": " 1000 ",
-                    "language": " PHP ",
-                    "line_number": " 60 ",
-                    "rule_name": " Reflected XSS "
-                },
-                    ...
-                    
-                ]
-            },
-            "target": " tests/vulnerabilities "
-        }
-    }
-    '''
-    staticCodeDetect(r'tests',r'E:\\workspace\\A-8-Software-engineer\\flask_backend\\vul.xml')
-    
-    with open('vul.xml', 'r') as file:
-        xml_data = file.read()
+    with open(r'E:\\workspace\\flask_backend\\vul.xml', 'r') as file:
+            xml_data = file.read()
     xml_data = re.sub(r'\n', ' ', xml_data)
     xml_data = re.sub(r'\s{2,}', ' ', xml_data)
     root = ET.fromstring(xml_data)
     xml_dict = xml_to_dict(root)
-
+    os.remove(r'E:\\workspace\\flask_backend\\vul.xml') 
     json_data = json.dumps(xml_dict, indent=4)
-    #print(json_data)
+    #print(json_data)   
     return(xml_dict)
 
-fetchxml()
+

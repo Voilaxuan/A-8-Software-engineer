@@ -1,3 +1,4 @@
+import asyncio
 import os
 import uuid
 
@@ -6,7 +7,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 from check import perform_code_check, perform_security_check
-from common import fetchxml
+from common import fetchxml, codedetect,seq
+from multiprocessing import Pool
+import time
 
 app = Flask(__name__)
 app.secret_key = '123456'  # 设置会话密钥
@@ -171,7 +174,26 @@ def doupload():
             return "File upload failed!"
     else:
         return "no Authenticated"
-    
+
+@app.route('/dovuldetect', methods=['GET','POST'])
+# Return The JSON Format Data to Frontend
+def dovuldetect():
+    if 'user_id' in session:
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            result = loop.run_until_complete(codedetect())
+            loop.close()
+            
+        except RuntimeError:
+            data = {}
+            data['status'] = 1
+            data['message'] = 'OK'
+            return jsonify(data)
+    else:
+        return "no Authenticated"
+
+
 @app.route('/dovulfetch', methods=['GET','POST'])
 # Return The JSON Format Data to Frontend
 def dovulfech():
