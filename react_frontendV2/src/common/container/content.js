@@ -69,8 +69,16 @@ const Reform = Loadable({
 })
 
 const webPageDetection = Loadable({
-    loader: ()=> import('../pages/webPageDetection'),
-    loading: Loading
+  loader: () => import('../pages/webPageDetection'),
+  loading: Loading
+})
+const fileDetection = Loadable({
+  loader: () => import('../pages/fileDetection'),
+  loading: Loading
+})
+const codeTextDetection = Loadable({
+  loader: () => import('../pages/codeTextDetection'),
+  loading: Loading
 })
 
 const Contents = () => (
@@ -88,6 +96,8 @@ const Contents = () => (
     <Route path="/mock" component={Mock} />
     <Route path="/reform" component={Reform} />
     <Route path="/webPageDetection" component={webPageDetection} />
+    <Route path="/fileDetection" component={fileDetection} />
+    <Route path="/codeTextDetection" component={codeTextDetection} />
   </Content>
 )
 

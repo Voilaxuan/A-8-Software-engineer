@@ -24,7 +24,10 @@ const allMenu = [
     name: '画廊模块',
     url: 'pic',
     icon: 'edit',
-    children: [{ name: '时光相片', url: 'album' }, { name: '瀑布流', url: 'waterfall' }]
+    children: [
+      { name: '时光相片', url: 'album' },
+      { name: '瀑布流', url: 'waterfall' }
+    ]
   },
   {
     name: '搜索模块',
@@ -50,6 +53,14 @@ const allMenu = [
   {
     name: 'webPageDetection',
     url: 'webPageDetection'
+  },
+  {
+    name: 'fileDetection',
+    url: 'fileDetection'
+  },
+  {
+    name: 'codeTextDetection',
+    url: 'codeTextDetection'
   }
 ]
 
