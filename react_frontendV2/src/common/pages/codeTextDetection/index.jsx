@@ -2,7 +2,8 @@ import React from 'react'
 import './index.less'
 import { Button, Form, Icon, Input, Table, Modal, Checkbox } from 'antd'
 
-class fileDetectionModal extends React.Component {
+import Editor from './components/editor.jsx'
+class codeTextDetectionModal extends React.Component {
   // eslint-disable-next-line no-useless-constructor
   temp_data
 
@@ -77,8 +78,9 @@ class fileDetectionModal extends React.Component {
 
     return (
       <div>
+        <Editor></Editor>
         <Button type="primary" onClick={this.showModal} size="large">
-          New File Detection
+          New CodeText Detection
         </Button>
         <Modal
           title="New Detection"
@@ -123,5 +125,5 @@ class fileDetectionModal extends React.Component {
     )
   }
 }
-const fileDetection = Form.create()(fileDetectionModal)
-export default fileDetection
+const codeTextDetection = Form.create()(codeTextDetectionModal)
+export default codeTextDetection
