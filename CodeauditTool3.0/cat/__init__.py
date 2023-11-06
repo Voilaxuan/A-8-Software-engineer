@@ -30,9 +30,9 @@ def run_codeDector(detectFile, outputFile, format = 'xml', ruleid='', secretName
         'report': ''
     }
     Running(a_sid).status(data)  # 实例化Running类
-
+    
     # cli.start(args.target, args.format, args.output, args.special_rules, a_sid, 'php', args.secret_name, args.black_path)
-    cli.start(detectFile, format, outputFile, ruleid, a_sid, 'php,', secretName, '')
+    cli.start(detectFile, format, outputFile, ruleid, a_sid, 'php,java', secretName, '')
 
 def main():
     try:

@@ -1,0 +1,1 @@
+{"code": 1001, "msg": "scan finished", "result": {"extension": 1, "file": 1, "framework": "Unknown Framework", "language": "java", "push_rules": 7, "target_directory": "tests\\vulnerabilities\\tmp.java", "trigger_rules": 0, "vulnerabilities": []}}

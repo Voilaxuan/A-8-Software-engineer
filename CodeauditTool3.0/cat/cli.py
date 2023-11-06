@@ -59,9 +59,10 @@ def start(target, formatter, output, special_rules, a_sid=None, language=None, s
 
         # if not language:
         dt = Detection(target_directory, files)
+        
         main_language = dt.language
         main_framework = dt.framework
-
+        
         logger.info('[CLI] [STATISTIC] Language: {l} Framework: {f}'.format(l=",".join(main_language), f=main_framework))
         logger.info('[CLI] [STATISTIC] Files: {fc}, Extensions:{ec}, Consume: {tc}'.format(fc=file_count,
                                                                                            ec=len(files),

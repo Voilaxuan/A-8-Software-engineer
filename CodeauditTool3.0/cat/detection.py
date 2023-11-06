@@ -37,6 +37,7 @@ class Detection(object):
         """Detection main language"""
         language_extensions = {}
         xml_languages = self._read_xml('languages.xml')
+        
         if xml_languages is None:
             logger.critical('languages read failed!!!')
             languages = None
@@ -53,7 +54,7 @@ class Detection(object):
             for lang in language:
                 l_ext = lang.get('value').lower()
                 language_extensions[l_name]['extensions'].append(l_ext)#列表中增加lang列表中value值的小写
-
+            
         languages = language_extensions
 
         tmp_language = None

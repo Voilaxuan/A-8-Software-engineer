@@ -681,9 +681,14 @@ class Core(object):
 
         logger.debug('[CVI-{cvi}] match-mode {mm}'.format(cvi=self.cvi, mm=self.rule_match_mode))
         # if self.file_path[-3:].lower() == 'php':
+        
+        if self.lan == "java":
+            return True, 'Unconfirmed Function-param-controllable', []  
+        
         if self.lan == "php":
             try:
                 self.init_php_repair()
+                   
                 ast = CAST(self.rule_match, self.target_directory, self.file_path, self.line_number,
                            self.code_content, files=self.files, rule_class=self.single_rule,
                            repair_functions=self.repair_functions, controlled_params=self.controlled_list)
@@ -699,7 +704,7 @@ class Core(object):
                 if self.rule_match_mode == const.mm_function_param_controllable:
                     rule_match = self.rule_match.strip('()').split('|')#删除开头和结尾的括号并在|处切片,准备该规则对应的敏感函数列表
                     logger.debug('[RULE_MATCH] {r}'.format(r=rule_match))
-                    try:
+                    try:  
                         result = php_scan_parser(rule_match, self.line_number, self.file_path,
                                                  repair_functions=self.repair_functions,
                                                  controlled_params=self.controlled_list)#对这行代码的漏洞点进行分析

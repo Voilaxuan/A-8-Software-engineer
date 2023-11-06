@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results>
+<seeda0toyvhe>
+    <extension>
+        1
+    </extension>
+    <file>
+        1
+    </file>
+    <framework>
+        Unknown Framework
+    </framework>
+    <language>
+        java
+    </language>
+    <push_rules>
+        7
+    </push_rules>
+    <target_directory>
+        C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+    </target_directory>
+    <trigger_rules>
+        3
+    </trigger_rules>
+    <vulnerabilities>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            Document doc=dombuilder.parse(is);   #injection 
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+        </file_path>
+        <id>
+            2000
+        </id>
+        <language>
+            JAVA
+        </language>
+        <line_number>
+            5
+        </line_number>
+        <rule_name>
+            XXE
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            SAXParser parser = factory.newSAXParser();
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+        </file_path>
+        <id>
+            2000
+        </id>
+        <language>
+            JAVA
+        </language>
+        <line_number>
+            9
+        </line_number>
+        <rule_name>
+            XXE
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            URL u = new URL(url);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+        </file_path>
+        <id>
+            2002
+        </id>
+        <language>
+            JAVA
+        </language>
+        <line_number>
+            16
+        </line_number>
+        <rule_name>
+            SSRF
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+            okHttpclient client = new okHttpclient();
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+        </file_path>
+        <id>
+            2002
+        </id>
+        <language>
+            JAVA
+        </language>
+        <line_number>
+            28
+        </line_number>
+        <rule_name>
+            SSRF
+        </rule_name>
+    </vul>
+    <vul>
+        <analysis>
+            Unconfirmed Function-param-controllable
+        </analysis>
+        <chain>
+            
+        </chain>
+        <code_content>
+              Runtime.getRuntime().exec(command);
+
+        </code_content>
+        <commit_author>
+            JANNEY W
+        </commit_author>
+        <file_path>
+            C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+        </file_path>
+        <id>
+            2005
+        </id>
+        <language>
+            JAVA
+        </language>
+        <line_number>
+            35
+        </line_number>
+        <rule_name>
+            RCE
+        </rule_name>
+    </vul>
+    </vulnerabilities>
+    <target>
+        C:\Users\90834\Desktop\A-8-Software-engineer\CodeauditTool3.0\tests\vulnerabilities\java_test.java
+    </target>
+</seeda0toyvhe>
+</results>
