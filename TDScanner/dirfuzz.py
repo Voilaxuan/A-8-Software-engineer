@@ -11,17 +11,18 @@
 '''
 
 import json
-import os
 import sys
+import urllib
 
-from TDScanner.libs import requests
-from libs.output.CLIOutput import CLIOutput
-from TDScanner.libs.utils.FileUtils import FileUtils
+import libs.requests as requests
+from libs.output import *
+from libs.utils.FileUtils import FileUtils
 import threading
 import queue
+from libs.output.CLIOutput import CLIOutput
 
 # 全局配置
-using_dic = 'dics/dirs.txt'  # 使用的字典文件
+using_dic = './dics/dirs.txt'  # 使用的字典文件
 threads_count = 100  # 线程数
 timeout = 3  # 超时时间
 allow_redirects = True  # 是否允许URL重定向
@@ -37,9 +38,18 @@ proxies = {  # 代理配置
 }
 
 
-# def dir_check(url):
-#     return requests.get(url, stream=True, headers=headers, timeout=timeout, proxies=proxies,
-#                         allow_redirects=allow_redirects)
+def dir_check(url):
+    try:
+        i_headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.48',
+            'Upgrade-Insecure-Requests': '1', 'Referer': 'https: // google.com'}
+
+        req = urllib.request.Request(url, headers=i_headers)
+        response = urllib.request.urlopen(req)
+    except Exception as e:
+        print(e)
+        return None
+    return response
 
 
 class WyWorker(threading.Thread):
@@ -49,6 +59,7 @@ class WyWorker(threading.Thread):
         self.queue = queue
         self.output = CLIOutput()
 
+
     def run(self):
         while True:
             if self.queue.empty():
@@ -57,18 +68,19 @@ class WyWorker(threading.Thread):
             try:
                 url = self.queue.get_nowait()
                 results = dir_check(url)
-                if results.status_code == requests.codes.ok:
+                if results is not None and results.status_code == 200:
 
                     dir_exists.append(url)
-                msg = "[%s]:%s \n" % (results.status_code, results.url)
+                #msg = "[%s]:%s \n" % (results.status_code, results.url)
             # self.output.printInLine(msg)
             except Exception as e:
+                print(e)
                 pass
                 break
 
 
 def fuzz_start(siteurl):
-    #output = CLIOutput()
+    output = CLIOutput()
 
     global dir_exists
     dir_exists = []
@@ -76,13 +88,7 @@ def fuzz_start(siteurl):
     # 生成队列堆栈
     my_queue = queue.Queue()
 
-    #生成完整目录
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # 构建 dirs.txt.txt 文件的完整路径
-    dirs_file_path = os.path.join(current_dir, using_dic)
-
-    for line in FileUtils.getLines(dirs_file_path):
+    for line in FileUtils.getLines(using_dic):
         line1 = '%s/%s' % (siteurl.rstrip('/'), line.replace('%EXT%', 'asp'))
         line2 = '%s/%s' % (siteurl.rstrip('/'), line.replace('%EXT%', 'php'))
         line3 = '%s/%s' % (siteurl.rstrip('/'), line.replace('%EXT%', 'jsp'))
@@ -97,7 +103,6 @@ def fuzz_start(siteurl):
     #	output.printTarget(siteurl)
     #	output.printConfig( str(threads_count), str(queue.qsize()))
     #	output.printHeader('-' * 60)
-
 
     # 初始化线程组
     threads = []
@@ -119,7 +124,5 @@ def fuzz_start(siteurl):
 
     return dir_exists
 
-
-#print fuzz_start('http://127.0.0.1')
-
-
+if __name__ == '__main__':
+    print (fuzz_start('https://github.com'))

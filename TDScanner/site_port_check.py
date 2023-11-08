@@ -17,14 +17,15 @@ port = [21, 22, 23, 25, 53, 67, 68, 80, 110, 143, 389, 443, 8080, 1433, 2375,338
 def connScan(tgtHost, tgtPort):
     try:
         connSkt = socket(AF_INET, SOCK_STREAM)
+        connSkt.settimeout(2)
         connSkt.connect((tgtHost, tgtPort))  # establishes a connection to target
-        connSkt.send('PythonPortScan\r\n')  # send a string of data to the open port and wait for the response
+        connSkt.send('PythonPortScan\r\n'.encode())  # send a string of data to the open port and wait for the response
         results = connSkt.recv(104)  # the response might give us an indication of the appliction running on the target host and port
         screenLock.acquire()
         #print str(results)
         return '[+]%d/tcp open' % tgtPort + '[+] ' + str(results)
-
-    except:
+    except Exception as e:
+        print(e)
         screenLock.acquire()
         return '[-]%d/tcp closed' % tgtPort
 
@@ -41,12 +42,15 @@ def portScan(tgtHost):
         print 'Scan Results for: '+ tgtIP'''
     #setdefaulttimeout(1)
     ports = []
-    tgtHost = tgtHost.strip('http:').strip('/')
+    if tgtHost.startswith('https:'):
+        tgtHost = tgtHost.strip('https:').strip('/')
+    else:
+        tgtHost = tgtHost.strip('http:').strip('/')
     for tgtPort in port:
         i = connScan(tgtHost, int(tgtPort))
         ports.append(i)
     return ports
 
 
-
-#print portScan('http://127.0.0.1/')
+if __name__ == '__main__':
+    print (portScan('https://github.com/'))

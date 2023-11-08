@@ -50,3 +50,11 @@ phpmyadmin
 test.%EXT%
 123.%EXT%
 shell.%EXT%
+/.git
+/.git/HEAD
+/.git/index
+/.git/config
+/.git/description
+/README.MD
+/README.md
+/README

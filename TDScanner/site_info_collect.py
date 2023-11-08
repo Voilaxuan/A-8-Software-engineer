@@ -5,15 +5,17 @@ import urllib.error
 import re
 import sys
 from bs4 import BeautifulSoup
-
 import manager
-import net_explore
+import subDomainScan
 import save_to_mysql
 import dirfuzz
 from site_port_check import portScan
 import time
-import os
+import config
 import importlib
+import libs.utils.common as common
+import DNS_check
+
 urllist =[]
 iplist =[]
 
@@ -65,32 +67,76 @@ def get(target_url):
         pass
     return body_text
 
-def subdomainapi(target_url):
-    if 'www' in target_url:
-        try:
-            subdomain = []
-            target_url = target_url.strip('http:').strip('/').strip('www.')
-            api = 'http://i.links.cn/subdomain/'+target_url+'.html'
-            i_headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.48'}
-            req = urllib.request.Request(api,headers=i_headers)
-            response = urllib.request.urlopen(req)
-            body_text=response.read.decode("utf-8")
-            print("subdomain")
-            print(api)
-            body_text = get(api)
-            print("body_text",body_text)
-            soup=BeautifulSoup(body_text)
-            links=soup.findAll('a')
-            for link in links:
-                url =link.get('href')
-                if target_url in url:
-                    subdomain.append(url)
-            return subdomain
-        except Exception as e:
-            print("出现异常:",e)
-            pass
-    else:
-        return "0"
+# def subdomainapi(target_url):
+#     # if 'www' in target_url:
+#     #     try:
+#     #         subdomain = []
+#     #         target_url = target_url.strip('http:').strip('/').strip('www.')
+#     #         api = 'http://i.links.cn/subdomain/'+target_url+'.html'
+#     #         i_headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.48'}
+#     #         req = urllib.request.Request(api,headers=i_headers)
+#     #         response = urllib.request.urlopen(req)
+#     #         body_text=response.read.decode("utf-8")
+#     #         print("subdomain")
+#     #         print(api)
+#     #         body_text = get(api)
+#     #         print("body_text",body_text)
+#     #         soup=BeautifulSoup(body_text)
+#     #         links=soup.findAll('a')
+#     #         for link in links:
+#     #             url =link.get('href')
+#     #             if target_url in url:
+#     #                 subdomain.append(url)
+#     #         return subdomain
+#     #     except Exception as e:
+#     #         print("出现异常:",e)
+#     #         pass
+#     # else:
+#     #     return "0"
+#
+#     try:
+#         pro = Pro_db.objects.get(id=pro_id)
+#         # url = "http://ce.baidu.com/index/getRelatedSites?site_address="+domain
+#         # res = requests.get(url,timeout = 10)
+#
+#         # domain_list = json.loads(res.content)
+#         # worker1_list = []
+#         # for d in domain_list['data']:
+#         #     url = "http://"+d['domain']
+#         #     worker1 = get_domain_info.delay(pro_id,url,1)
+#         #     worker1_list.append(worker1)
+#
+#         # 处理域名
+#         target = common.get_subdomain_url(target_url)
+#         threads_num = config.SUB_DOMAIN_THREAD
+#
+#         sub = subDomainScan.SubDomainScan(target, threads_num)
+#         messList = sub.run()
+#
+#         print(messList)
+#
+#         # 判断域名存活
+#         worker3_list = []
+#         for m in messList:
+#              url = "http://" + m[0]
+#              ips = m[1]
+#              worker3 = get_domain_info.delay(pro_id, url, ips, 1)
+#              worker3_list.append(worker3)
+#
+#          flag = True
+#         while flag:
+#              time.sleep(1)
+#              flag = False
+#              for w in worker3_list:
+#                  if w.status == "PENDING":
+#                      flag = True
+#
+#         pro.pro_domain_status = "Finish"
+#         pro.save()
+#
+#     except Exception as e:
+#         print(e)
+
 
 
 def netexp(url):
@@ -137,6 +183,8 @@ def runscan(target_url):
 
         #subdomain = subdomainapi(target_url)
         subdomain = ""
+        dns_content = DNS_check.check_expected_content(target_url)
+        differnet_dsn = DNS_check.compare_different_dns(target_url)
         print("target_url",target_url)
         print("target_urllist",target_urllist)
         print("iplist",iplist)
@@ -147,6 +195,7 @@ def runscan(target_url):
     except Exception as e:
         print(e)
     #print target_urllist,iplist,collect_dirs,collect_ports,subdomain
-    return target_urllist,iplist,collect_dirs,collect_ports,subdomain,hashid
+    return target_urllist,iplist,collect_dirs,collect_ports,subdomain,dns_content,differnet_dsn,hashid
 
 #runscan('http://127.0.0.1')
+
