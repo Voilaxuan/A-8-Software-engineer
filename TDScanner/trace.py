@@ -39,7 +39,7 @@ def trace(target):
         #target = request.form["target"]
         #target = "https://www.google.com/maps"
         print("targe",target)
-        target_urllist, iplist, collect_dirs, collect_ports, subdomain ,dns_content, differnet_dsn ,hashid = site_info_collect.runscan(target)
+        target_urllist, iplist, collect_dirs, collect_ports, subdomain ,dns_content, different_dsn ,hashid = site_info_collect.runscan(target)
         print("target_urllist",target_urllist)
         # urla = checkurl(target)
         # id = hashlib.md5()
@@ -63,7 +63,7 @@ def trace(target):
         "collect_ports":collect_ports,
         "subdomain":subdomain,
         "dns_content":dns_content,
-        "differnet_dsn":differnet_dsn
+        "different_dsn":different_dsn
 
     }
 

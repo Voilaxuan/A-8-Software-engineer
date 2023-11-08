@@ -31,7 +31,7 @@ def check_expected_content(url):
     return False
 
 #Another method of verification is to use python's dnspython module to query different DNS servers and compare the returned results. If the results are inconsistent, it indicates that there may be DNS Spoofing.
-def compare_different_dns(url):
+def compare_different_dsn(url):
     dns_servers = ["8.8.8.8","1.1.1.1","1.0.0.1", "208.67.222.222",
                    "208.67.220.220","9.9.9.9","149.112.112.112","8.26.56.26",
                    "8.20.247.20","114.114.114.114"]  # different DNS

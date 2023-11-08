@@ -184,7 +184,7 @@ def runscan(target_url):
         #subdomain = subdomainapi(target_url)
         subdomain = ""
         dns_content = DNS_check.check_expected_content(target_url)
-        differnet_dsn = DNS_check.compare_different_dns(target_url)
+        different_dsn = DNS_check.compare_different_dsn(target_url)
         print("target_url",target_url)
         print("target_urllist",target_urllist)
         print("iplist",iplist)
@@ -195,7 +195,7 @@ def runscan(target_url):
     except Exception as e:
         print(e)
     #print target_urllist,iplist,collect_dirs,collect_ports,subdomain
-    return target_urllist,iplist,collect_dirs,collect_ports,subdomain,dns_content,differnet_dsn,hashid
+    return target_urllist,iplist,collect_dirs,collect_ports,subdomain,dns_content,different_dsn,hashid
 
 #runscan('http://127.0.0.1')
 
