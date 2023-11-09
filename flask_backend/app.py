@@ -224,9 +224,15 @@ def dourldetect():
 # Return The JSON Format Data to Frontend
 def dourlfech():
     if 'user_id' in session:
-        return trace.trace("https://www.baidu.com")
+        replydata = {}
+        replydata['status'] = 1
+        replydata['data'] = trace.trace("https://www.baidu.com")
+        return jsonify(replydata)
     else:
-        return "no Authenticated"
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
 
 @app.route('/magicsession', methods=['GET'])
 def magicsession():
