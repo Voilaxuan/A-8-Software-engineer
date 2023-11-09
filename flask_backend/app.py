@@ -203,6 +203,31 @@ def dovulfech():
         return "no Authenticated"
 
 
+import trace
+@app.route('/dourldetect', methods=['GET', 'POST'])
+# Return The JSON Format Data to Frontend
+def dourldetect():
+    if 'user_id' in session:
+        try:
+            urlresult = trace.trace("https://www.baidu.com")
+        except:
+            return "some thing wrong happend"
+        data = {}
+        data['status'] = 1
+        data['message'] = 'OK'
+        return jsonify(data)
+    else:
+        return "no Authenticated"
+
+
+@app.route('/dourlfetch', methods=['GET', 'POST'])
+# Return The JSON Format Data to Frontend
+def dourlfech():
+    if 'user_id' in session:
+        return trace.trace("https://www.baidu.com")
+    else:
+        return "no Authenticated"
+
 @app.route('/magicsession', methods=['GET'])
 def magicsession():
     session['user_id'] = 2
