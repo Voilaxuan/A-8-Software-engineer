@@ -89,6 +89,9 @@ class codeTextDetectionModal extends React.Component {
           onCancel={this.handleCancel}
         >
           <Form horizontal>
+            <Form.Item {...formItemLayout} label="TestForm">
+              <Input type="text" {...getFieldProps('TestForm')} />
+            </Form.Item>
             <Form.Item {...formItemLayout} label="LogName：">
               <Input type="text" {...getFieldProps('logName')} />
             </Form.Item>
