@@ -1,6 +1,9 @@
 import React from 'react'
+import 'regenerator-runtime/runtime'
 import './index.less'
 import { Button, Form, Icon, Input, Table, Modal, Checkbox } from 'antd'
+
+const baseURL = 'http://20.2.73.68:5003/'
 
 import Editor from './components/editor.jsx'
 class codeTextDetectionModal extends React.Component {
@@ -13,41 +16,59 @@ class codeTextDetectionModal extends React.Component {
       visible: false
     }
   }
+
   // 单击确定按钮提交表单
-  handleSubmit = () => {
+  handleSubmit = async () => {
     this.temp_data = this.props.form.getFieldsValue()
     console.log('检测', this.temp_data)
     this.setState({ visible: false })
     console.log('打印测试', this.temp_data)
     let fileData = new FormData()
-    fileData.append('file', this.temp_data.file.raw) // 传文件
+    // fileData.append('file', this.temp_data.file.raw) // 传文件
     //保护代码 避免空数据继续执行
     if (!this.temp_data) {
       console.log('tempdata为空')
       return
     }
+
     const formdata = {
-      entry_target_get: fileData,
+      // entry_target_get: fileData,
       entry_ruleid_get: this.temp_data.specialRule,
       entry_secret_get: this.temp_data.secretName,
       get_format: this.temp_data.logName,
       entry_logname_get: this.temp_data.logName
     }
     console.log('formdata', formdata)
-    axios({
-      url: '/api/importExcel', //
-      method: 'post',
+    console.log(baseURL + 'magicsession')
+
+    const sessionReq = await fetch(baseURL + 'magicsession', {
+      method: 'get'
       // data:formdata
-      data: formdata
     }).then(
-      request => {
-        console.log('requset' + request.data)
+      res => {
+        console.log('response', res.json())
+        // return fetch.get(baseURL+"dovuldetect");
       },
       error => {
-        console.log('error' + error)
+        console.log('error', error)
+      }
+    )
+
+    const detectReq = await fetch(baseURL + 'dovuldetect', {
+      method: 'get',
+      // data:formdata
+      credentials: 'include'
+    }).then(
+      res => {
+        console.log('response', res.json())
+        // return fetch.get(baseURL+"dovuldetect");
+      },
+      error => {
+        console.log('error', error)
       }
     )
   }
+
   // 弹出框设置
   showModal = () => {
     this.setState({ visible: true })
@@ -74,7 +95,7 @@ class codeTextDetectionModal extends React.Component {
     const { getFieldProps } = this.props.form
     const plainOptions = ['csv', 'xml']
     const defaultCheckedList = ['csv']
-    const ShowField = true
+    const ShowField = false
 
     return (
       <div>

@@ -49,7 +49,8 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
-    "screenfull": "^3.3.2"
+    "screenfull": "^3.3.2",
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
     "analyze-webpack-plugin": "^0.2.5",
