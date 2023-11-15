@@ -110,8 +110,8 @@ def dashboard():
         username = cursor.fetchone()[0]
         # 查询用户关联的文件列表
         cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
-        #files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
-        files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        #files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         files.reverse()
         return render_template('dashboard.html', username=username, files=files)
     else:
