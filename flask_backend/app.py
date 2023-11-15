@@ -1,6 +1,7 @@
 import asyncio
 import os
 import uuid
+import re
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -106,11 +107,13 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         # 查询用户信息
+        #print(user_id)
         cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
         username = cursor.fetchone()[0]
         # 查询用户关联的文件列表
+        pattern = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
         cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
-        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath, 'filevalue': re.findall(pattern, filepath)[0]} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         #files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         files.reverse()
         return render_template('dashboard.html', username=username, files=files)
@@ -168,47 +171,23 @@ def register():
         return render_template('register.html')
 
 
-
-
-@app.route('/doupload', methods=['POST'])
-def doupload():
+@app.route('/dogetfilelist', methods=['POST'])
+def dogetfilelist():
     if 'user_id' in session:
-        if 'file' not in request.files:
-            # 没有选择文件
-            return "No file selected"
-
-        file = request.files['file']
-        if file.filename == '':
-            # 未选择文件
-            return "No file selected"
-
-        if file:
-            filename =  file.filename
-            # 获取用户ID
-            user_id = session.get('user_id')
-
-            if user_id:
-                # 查询用户信息
-                # 生成唯一文件夹名
-                folder_name = str(uuid.uuid4())
-                # 创建用户文件夹
-                user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(user_id), folder_name)
-                os.makedirs(user_folder, exist_ok=True)
-
-                # 保存文件到用户文件夹
-                file_path = os.path.join(user_folder, filename)
-                file.save(file_path)
-
-                # 将文件信息存储在数据库中
-                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
-                               (filename, file_path, user_id))
-                conn.commit()
-                add_log(user_id,"upload_a_file")
-                return redirect(url_for('dashboard'))
-            else:
-                return "User not logged in"
-        else:
-            return "File upload failed!"
+        user_id = session['user_id']
+        # 查询用户信息
+        #print(user_id)
+        cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
+        username = cursor.fetchone()[0]
+        # 查询用户关联的文件列表
+        pattern = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath, 'filevalue': re.findall(pattern, filepath)[0]} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        #files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        replydata = {}
+        replydata["status"] = 1
+        replydata["fileslist"] = files
+        return jsonify(replydata)
     else:
         return "no Authenticated"
 
@@ -216,6 +195,7 @@ def doupload():
 # Return The JSON Format Data to Frontend
 def dovuldetect():
     if 'user_id' in session:
+        userid = session['user_id']
         if request.method == 'POST':
         # 从请求中获取JSON数据
             filepath = request.get_json()['filepath']
@@ -225,14 +205,14 @@ def dovuldetect():
             try:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(codedetect(filepath))
+                result = loop.run_until_complete(codedetect(filepath,userid))
                 loop.close()
 
             except RuntimeError:
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                add_log(session.get('user_id'), "dovuldetect")
+                #add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
         else:
             filepath = 'vulx'
@@ -240,14 +220,14 @@ def dovuldetect():
             try:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(codedetect(filepath))
+                result = loop.run_until_complete(codedetect(filepath,userid))
                 loop.close()
 
             except RuntimeError:
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                add_log(session.get('user_id'), "dovuldetect")
+                #add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
 
     else:
@@ -262,7 +242,7 @@ def dovuldetect():
 def dovulfech():
     if 'user_id' in session:
         try:
-            add_log(session.get('user_id'), "dovulfetch")
+            #add_log(session.get('user_id'), "dovulfetch")
             return jsonify(fetchxml())
         except FileNotFoundError:
             replydata = {}
