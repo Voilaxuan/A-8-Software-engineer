@@ -229,8 +229,14 @@ def dovuldetect():
 # Return The JSON Format Data to Frontend
 def dovulfech():
     if 'user_id' in session:
-        add_log(session.get('user_id'), "dovulfetch")
-        return jsonify(fetchxml())
+        try:
+            add_log(session.get('user_id'), "dovulfetch")
+            return jsonify(fetchxml())
+        except FileNotFoundError:
+            replydata = {}
+            replydata['status'] = 0
+            replydata['data'] = 'Please execute dovuldetect first!'
+            return jsonify(replydata)
     else:
         return "no Authenticated"
 
