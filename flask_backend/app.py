@@ -203,26 +203,52 @@ def doupload():
                 return "User not logged in"
         else:
             return "File upload failed!"
+    else:
+        return "no Authenticated"
 
 @app.route('/dovuldetect', methods=['GET','POST'])
 # Return The JSON Format Data to Frontend
 def dovuldetect():
     if 'user_id' in session:
-        try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            result = loop.run_until_complete(codedetect())
-            loop.close()
-            
-        except RuntimeError:
-            data = {}
-            data['status'] = 1
-            data['message'] = 'OK'
-            add_log(session.get('user_id'), "dovuldetect")
-            return jsonify(data)
+        if request.method == 'POST':
+        # 从请求中获取JSON数据
+            filepath = request.get_json()['filepath']
+            print(filepath)
+            #filepath = 'vulx'
+            #print(filepath)
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(codedetect(filepath))
+                loop.close()
+
+            except RuntimeError:
+                replydata = {}
+                replydata['status'] = 1
+                replydata['data'] = 'OK'
+                add_log(session.get('user_id'), "dovuldetect")
+                return jsonify(replydata)
+        else:
+            filepath = 'vulx'
+            print(filepath)
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(codedetect(filepath))
+                loop.close()
+
+            except RuntimeError:
+                replydata = {}
+                replydata['status'] = 1
+                replydata['data'] = 'OK'
+                add_log(session.get('user_id'), "dovuldetect")
+                return jsonify(replydata)
 
     else:
-        return "no Authenticated"
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
 
 
 @app.route('/dovulfetch', methods=['GET','POST'])
@@ -237,26 +263,35 @@ def dovulfech():
             replydata['status'] = 0
             replydata['data'] = 'Please execute dovuldetect first!'
             return jsonify(replydata)
+
     else:
-        return "no Authenticated"
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
 
 
 import trace
 @app.route('/dourldetect', methods=['GET', 'POST'])
 # Return The JSON Format Data to Frontend
+
+
 def dourldetect():
     if 'user_id' in session:
         try:
             urlresult = trace.trace("https://www.baidu.com")
         except:
             return "some thing wrong happend"
-        data = {}
-        data['status'] = 1
-        data['message'] = 'OK'
+        replydata = {}
+        replydata['status'] = 1
+        replydata['message'] = 'OK'
         add_log(session.get('user_id'), "dourldetect")
-        return jsonify(data)
+        return jsonify(replydata)
     else:
-        return "no Authenticated"
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
 
 
 @app.route('/dourlfetch', methods=['GET', 'POST'])
@@ -274,7 +309,7 @@ def dourlfech():
         replydata['data'] = 'no Authenticated'
         return jsonify(replydata)
 
-@app.route('/magicsession', methods=['GET'])
+@app.route('/magicsession', methods=['GET','POST'])
 def magicsession():
     session['user_id'] = 2
     data = {}
