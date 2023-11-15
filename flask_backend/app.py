@@ -48,7 +48,13 @@ cursor.execute('''
         FOREIGN KEY (user_id) REFERENCES users (id)
     );
 ''')
+
 conn.commit()
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # 添加日志记录函数
 def add_log(user_id, executed_function):
@@ -63,9 +69,6 @@ def add_log(user_id, executed_function):
 
     # 关闭数据库连接
     conn.close()
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -107,7 +110,8 @@ def dashboard():
         username = cursor.fetchone()[0]
         # 查询用户关联的文件列表
         cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
-        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        #files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         files.reverse()
         return render_template('dashboard.html', username=username, files=files)
     else:
@@ -162,6 +166,8 @@ def register():
             return redirect(url_for('dashboard'))
     else:
         return render_template('register.html')
+
+
 
 
 @app.route('/doupload', methods=['POST'])
