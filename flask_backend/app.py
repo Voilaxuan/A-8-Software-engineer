@@ -37,9 +37,32 @@ cursor.execute('''
         FOREIGN KEY (user_id) REFERENCES users (id)
     );
 ''')
-
+# 创建日志表
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        username TEXT NOT NULL,
+        executed_function TEXT,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    );
+''')
 conn.commit()
 
+# 添加日志记录函数
+def add_log(user_id, executed_function):
+    # 连接到数据库
+    conn = sqlite3.connect('users.db', check_same_thread=False)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
+    username = cursor.fetchone()[0]
+    # 插入日志记录
+    cursor.execute('INSERT INTO logs (user_id, username, executed_function) VALUES (?,?,?)', (user_id, username, executed_function))
+    conn.commit()
+
+    # 关闭数据库连接
+    conn.close()
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -84,7 +107,7 @@ def dashboard():
         username = cursor.fetchone()[0]
         # 查询用户关联的文件列表
         cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
-        files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         files.reverse()
         return render_template('dashboard.html', username=username, files=files)
     else:
@@ -154,26 +177,32 @@ def doupload():
             return "No file selected"
 
         if file:
-            # 生成唯一文件名
-            filename = str(uuid.uuid4()) + '_' + file.filename
-            # 保存文件到指定路径
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # 将文件信息存储在数据库中
+            filename =  file.filename
+            # 获取用户ID
             user_id = session.get('user_id')
-            if user_id:
-                filepath = app.config['UPLOAD_FOLDER']
-                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
-                               (filename, filepath, user_id))
-                conn.commit()
 
+            if user_id:
+                # 查询用户信息
+                # 生成唯一文件夹名
+                folder_name = str(uuid.uuid4())
+                # 创建用户文件夹
+                user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(user_id), folder_name)
+                os.makedirs(user_folder, exist_ok=True)
+
+                # 保存文件到用户文件夹
+                file_path = os.path.join(user_folder, filename)
+                file.save(file_path)
+
+                # 将文件信息存储在数据库中
+                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
+                               (filename, file_path, user_id))
+                conn.commit()
+                add_log(user_id,"upload_a_file")
                 return redirect(url_for('dashboard'))
             else:
                 return "User not logged in"
         else:
             return "File upload failed!"
-    else:
-        return "no Authenticated"
 
 @app.route('/dovuldetect', methods=['GET','POST'])
 # Return The JSON Format Data to Frontend
@@ -189,7 +218,9 @@ def dovuldetect():
             data = {}
             data['status'] = 1
             data['message'] = 'OK'
+            add_log(session.get('user_id'), "dovuldetect")
             return jsonify(data)
+
     else:
         return "no Authenticated"
 
@@ -198,6 +229,7 @@ def dovuldetect():
 # Return The JSON Format Data to Frontend
 def dovulfech():
     if 'user_id' in session:
+        add_log(session.get('user_id'), "dovulfetch")
         return jsonify(fetchxml())
     else:
         return "no Authenticated"
@@ -215,6 +247,7 @@ def dourldetect():
         data = {}
         data['status'] = 1
         data['message'] = 'OK'
+        add_log(session.get('user_id'), "dourldetect")
         return jsonify(data)
     else:
         return "no Authenticated"
@@ -227,6 +260,7 @@ def dourlfech():
         replydata = {}
         replydata['status'] = 1
         replydata['data'] = trace.trace("https://www.baidu.com")
+        add_log(session.get('user_id'), "dourlfetch")
         return jsonify(replydata)
     else:
         replydata = {}
