@@ -26,18 +26,138 @@
         </section>
 
         <section>
-            <h2>File Actions</h2>
-            <form method="POST" action="/docheak">
-                <label for="selected_file">Select File:</label>
-                <select name="selected_file" id="selected_file">
-                    {% for file in files %}
+            <h2>Code Vul Check</h2>
+            <select id="codeVulSelect">
+                {% for file in files %}
                         <option value="{{ file.filevalue }}">{{ file.filename }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" name="cheak" value="error_check">Error Check</button>
-                <button type="submit" name="cheak" value="security_check">Security Check</button>
-            </form>
+                {% endfor %}
+            </select>
+            <button id="codeVulCheckBtn">Code Vul Check</button>
+
+        </section>
+
+        <section>
+            <h2>URL Detect</h2>
+            <input id="urlVulInput">
+            </input>
+            <button id="urlVulInputBtn">url Vul Detect</button>
+
+        </section>
+
+        <section>
+            <h2>Results</h2> <button id="clearresultcontentBtn">Clear Result Content</button>
+            <table border="1">
+                <tr>
+                    <td>Result Form</td>
+                </tr>
+                <tr>
+                    <td id="resulttext"></td>
+                </tr>
+            </table>
         </section>
     </main>
+    
 </body>
+
+<script>
+    // Function to handle the button click event
+    function handleCodeVulCheck() {
+        // Get the selected option value
+        var selectedOption = document.getElementById("codeVulSelect").value;
+
+        // Make a POST request to /dovulfetch
+        fetch('/dovuldetect', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                filepath: selectedOption
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response data
+            console.log(data);
+            // Check if the response status is 1 and data is "OK"
+            if (data.status === 1 && data.data === "OK") {
+                fetch('/dovulfetch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        filepath: selectedOption
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data
+                    console.log(data);
+                    // Check if the response status is 1 and data is "OK" 
+                        //alert(data.toString());
+                        var jsonString = JSON.stringify(data)
+                        var nameElement = document.getElementById('resulttext');
+                        nameElement.innerHTML = jsonString;               
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                });
+            } else {
+                alert("Code Vul Check failed!");
+            }
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+    }
+
+    function handleURLCheck() {
+        // Get the selected option value
+        var inputValue = document.getElementById("urlVulInput").value;
+
+        // Make a POST request to /dovulfetch
+        fetch('/dourlfetch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                url: inputValue
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response data
+            console.log(data);
+            // Check if the response status is 1 and data is "OK"
+            if (data.status === 1) {
+                    var jsonString = JSON.stringify(data)
+                    var nameElement = document.getElementById('resulttext');
+                    nameElement.innerHTML = jsonString; 
+            } else {
+                alert("URL Check failed!");
+            }
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+    }
+
+    function handleClearContent() {
+        var nameElement = document.getElementById('resulttext');
+        nameElement.innerHTML = "";  
+    }
+
+    // Add a click event listener to the button
+    document.getElementById("codeVulCheckBtn").addEventListener("click", handleCodeVulCheck);
+    document.getElementById("clearresultcontentBtn").addEventListener("click", handleClearContent);
+    document.getElementById("urlVulInputBtn").addEventListener("click", handleURLCheck);
+
+
+</script>
+
 </html>

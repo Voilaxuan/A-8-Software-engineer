@@ -299,7 +299,10 @@ def dovulfech():
     if 'user_id' in session:
         try:
             #add_log(session.get('user_id'), "dovulfetch")
-            return jsonify(fetchxml())
+            replydata = {}
+            replydata['status'] = 1
+            replydata['data'] = fetchxml()
+            return jsonify(replydata)
         except FileNotFoundError:
             replydata = {}
             replydata['status'] = 0
