@@ -120,7 +120,7 @@ def doupload():
             return jsonify(replydata)
 
         if file:
-            filename =  file.filename
+            filename = file.filename
             # 获取用户ID
             user_id = session.get('user_id')
 
@@ -136,16 +136,23 @@ def doupload():
                 file_path = os.path.join(user_folder, filename)
                 file.save(file_path)
 
-                # 将文件信息存储在数据库中
-                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
-                               (filename, file_path, user_id))
-                conn.commit()
-                add_log(user_id,"upload_a_file")
-                return redirect(url_for('dashboard'))
+                # 检查文件是否成功保存
+                if os.path.exists(file_path):
+                    # 将文件信息存储在数据库中
+                    cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
+                                   (filename, file_path, user_id))
+                    conn.commit()
+                    add_log(user_id, "upload_a_file")
+                    return redirect(url_for('dashboard'))
+                else:
+                    replydata = {}
+                    replydata["status"] = 0
+                    replydata["fileslist"] = "File upload failed!"
+                    return jsonify(replydata)
             else:
                 replydata = {}
                 replydata["status"] = 0
-                replydata["fileslist"] = "user not login"
+                replydata["fileslist"] = "User not logged in"
                 return jsonify(replydata)
         else:
             replydata = {}
@@ -156,7 +163,7 @@ def doupload():
     else:
         replydata = {}
         replydata["status"] = 0
-        replydata["fileslist"] = "no Authenticated"
+        replydata["fileslist"] = "Not authenticated"
         return jsonify(replydata)
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
