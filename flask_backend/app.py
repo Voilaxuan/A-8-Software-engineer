@@ -101,7 +101,63 @@ def dologin():
             error_message = "用户名或密码错误"
             return render_template('login.html', error_message=error_message)
 
+@app.route('/doupload', methods=['POST'])
+def doupload():
+    if 'user_id' in session:
+        if 'file' not in request.files:
+            # 没有选择文件
+            replydata = {}
+            replydata["status"] = 0
+            replydata["fileslist"] = "No file selected"
+            return jsonify(replydata)
 
+        file = request.files['file']
+        if file.filename == '':
+            # 未选择文件
+            replydata = {}
+            replydata["status"] = 0
+            replydata["fileslist"] = "No file selected"
+            return jsonify(replydata)
+
+        if file:
+            filename =  file.filename
+            # 获取用户ID
+            user_id = session.get('user_id')
+
+            if user_id:
+                # 查询用户信息
+                # 生成唯一文件夹名
+                folder_name = str(uuid.uuid4())
+                # 创建用户文件夹
+                user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(user_id), folder_name)
+                os.makedirs(user_folder, exist_ok=True)
+
+                # 保存文件到用户文件夹
+                file_path = os.path.join(user_folder, filename)
+                file.save(file_path)
+
+                # 将文件信息存储在数据库中
+                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
+                               (filename, file_path, user_id))
+                conn.commit()
+                add_log(user_id,"upload_a_file")
+                return redirect(url_for('dashboard'))
+            else:
+                replydata = {}
+                replydata["status"] = 0
+                replydata["fileslist"] = "user not login"
+                return jsonify(replydata)
+        else:
+            replydata = {}
+            replydata["status"] = 0
+            replydata["fileslist"] = "File upload failed!"
+            return jsonify(replydata)
+
+    else:
+        replydata = {}
+        replydata["status"] = 0
+        replydata["fileslist"] = "no Authenticated"
+        return jsonify(replydata)
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' in session:
@@ -258,42 +314,50 @@ def dovulfech():
 
 
 import trace
-@app.route('/dourldetect', methods=['GET', 'POST'])
-# Return The JSON Format Data to Frontend
-
-
-def dourldetect():
-    if 'user_id' in session:
-        try:
-            urlresult = trace.trace("https://www.baidu.com")
-        except:
-            return "some thing wrong happend"
-        replydata = {}
-        replydata['status'] = 1
-        replydata['message'] = 'OK'
-        add_log(session.get('user_id'), "dourldetect")
-        return jsonify(replydata)
-    else:
-        replydata = {}
-        replydata['status'] = 0
-        replydata['data'] = 'no Authenticated'
-        return jsonify(replydata)
-
-
 @app.route('/dourlfetch', methods=['GET', 'POST'])
 # Return The JSON Format Data to Frontend
-def dourlfech():
+
+
+def dourlfetch():
     if 'user_id' in session:
-        replydata = {}
-        replydata['status'] = 1
-        replydata['data'] = trace.trace("https://www.baidu.com")
-        add_log(session.get('user_id'), "dourlfetch")
-        return jsonify(replydata)
+        if request.method == 'POST':
+            # 从请求中获取JSON数据
+            url = request.get_json()['url']
+            print(url)
+            try:
+                urlresult = trace.trace(url)
+            except:
+                replydata = {}
+                replydata['status'] = 0
+                replydata['message'] = 'something wrong'
+                return jsonify(replydata)
+
+            replydata = {}
+            replydata['status'] = 1
+            replydata['message'] = urlresult
+            add_log(session.get('user_id'), "dourldetect")
+            return jsonify(replydata)
+        else:
+            try:
+                print('default url for test')
+                urlresult = trace.trace("https://www.baidu.com")
+            except:
+                replydata = {}
+                replydata['status'] = 0
+                replydata['message'] = 'something wrong'
+                return jsonify(replydata)
+
+            replydata = {}
+            replydata['status'] = 1
+            replydata['message'] = urlresult
+            add_log(session.get('user_id'), "dourldetect")
+            return jsonify(replydata)
     else:
         replydata = {}
         replydata['status'] = 0
         replydata['data'] = 'no Authenticated'
         return jsonify(replydata)
+
 
 @app.route('/magicsession', methods=['GET','POST'])
 def magicsession():
