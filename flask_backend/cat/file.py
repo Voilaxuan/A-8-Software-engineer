@@ -264,7 +264,7 @@ class FileParseAll:
                 value_list.extend([str(tmp_manifest[key])])
                 break
 
-            if key != "*":
+            if key is not "*":
                 if key in tmp_manifest:
                     tmp_manifest = tmp_manifest[key]
                     index += 1

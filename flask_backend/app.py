@@ -1,12 +1,16 @@
+import asyncio
 import os
 import uuid
+import re
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 from check import perform_code_check, perform_security_check
-from common import fetchxml
+from common import fetchxml, codedetect
+from multiprocessing import Pool
+import time
 
 app = Flask(__name__)
 app.secret_key = '123456'  # 设置会话密钥
@@ -34,12 +38,38 @@ cursor.execute('''
         FOREIGN KEY (user_id) REFERENCES users (id)
     );
 ''')
+# 创建日志表
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        username TEXT NOT NULL,
+        executed_function TEXT,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    );
+''')
 
 conn.commit()
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# 添加日志记录函数
+def add_log(user_id, executed_function):
+    # 连接到数据库
+    conn = sqlite3.connect('users.db', check_same_thread=False)
+    cursor = conn.cursor()
+    cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
+    username = cursor.fetchone()[0]
+    # 插入日志记录
+    cursor.execute('INSERT INTO logs (user_id, username, executed_function) VALUES (?,?,?)', (user_id, username, executed_function))
+    conn.commit()
+
+    # 关闭数据库连接
+    conn.close()
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -77,11 +107,14 @@ def dashboard():
     if 'user_id' in session:
         user_id = session['user_id']
         # 查询用户信息
+        #print(user_id)
         cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
         username = cursor.fetchone()[0]
         # 查询用户关联的文件列表
+        pattern = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
         cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
-        files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath, 'filevalue': re.findall(pattern, filepath)[0]} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        #files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
         files.reverse()
         return render_template('dashboard.html', username=username, files=files)
     else:
@@ -138,50 +171,131 @@ def register():
         return render_template('register.html')
 
 
-@app.route('/doupload', methods=['POST'])
-def doupload():
+@app.route('/dogetfilelist', methods=['POST'])
+def dogetfilelist():
     if 'user_id' in session:
-        if 'file' not in request.files:
-            # 没有选择文件
-            return "No file selected"
-
-        file = request.files['file']
-        if file.filename == '':
-            # 未选择文件
-            return "No file selected"
-
-        if file:
-            # 生成唯一文件名
-            filename = str(uuid.uuid4()) + '_' + file.filename
-            # 保存文件到指定路径
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            # 将文件信息存储在数据库中
-            user_id = session.get('user_id')
-            if user_id:
-                filepath = app.config['UPLOAD_FOLDER']
-                cursor.execute('INSERT INTO files (filename, filepath, user_id) VALUES (?, ?, ?)',
-                               (filename, filepath, user_id))
-                conn.commit()
-
-                return redirect(url_for('dashboard'))
-            else:
-                return "User not logged in"
-        else:
-            return "File upload failed!"
+        user_id = session['user_id']
+        # 查询用户信息
+        #print(user_id)
+        cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
+        username = cursor.fetchone()[0]
+        # 查询用户关联的文件列表
+        pattern = r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        cursor.execute('SELECT filename, filepath FROM files WHERE user_id=?', (user_id,))
+        files = [{'filename': f'第{i}次提交: '+filepath.replace(filename,"").replace("./usersfiles/"+str(user_id),"") , 'filepath': filepath, 'filevalue': re.findall(pattern, filepath)[0]} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        #files = [{'filename': f'第{i}次提交: '+filename[filename.index('_')+1:], 'filepath': filepath} for i, (filename, filepath) in enumerate(cursor.fetchall())]
+        replydata = {}
+        replydata["status"] = 1
+        replydata["fileslist"] = files
+        return jsonify(replydata)
     else:
         return "no Authenticated"
-    
+
+@app.route('/dovuldetect', methods=['GET','POST'])
+# Return The JSON Format Data to Frontend
+def dovuldetect():
+    if 'user_id' in session:
+        userid = session['user_id']
+        if request.method == 'POST':
+        # 从请求中获取JSON数据
+            filepath = request.get_json()['filepath']
+            print(filepath)
+            #filepath = 'vulx'
+            #print(filepath)
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(codedetect(filepath,userid))
+                loop.close()
+
+            except RuntimeError:
+                replydata = {}
+                replydata['status'] = 1
+                replydata['data'] = 'OK'
+                #add_log(session.get('user_id'), "dovuldetect")
+                return jsonify(replydata)
+        else:
+            filepath = 'vulx'
+            print(filepath)
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(codedetect(filepath,userid))
+                loop.close()
+
+            except RuntimeError:
+                replydata = {}
+                replydata['status'] = 1
+                replydata['data'] = 'OK'
+                #add_log(session.get('user_id'), "dovuldetect")
+                return jsonify(replydata)
+
+    else:
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
+
+
 @app.route('/dovulfetch', methods=['GET','POST'])
 # Return The JSON Format Data to Frontend
 def dovulfech():
     if 'user_id' in session:
-        return jsonify(fetchxml())
+        try:
+            #add_log(session.get('user_id'), "dovulfetch")
+            return jsonify(fetchxml())
+        except FileNotFoundError:
+            replydata = {}
+            replydata['status'] = 0
+            replydata['data'] = 'Please execute dovuldetect first!'
+            return jsonify(replydata)
+
     else:
-        return "no Authenticated"
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
 
 
-@app.route('/magicsession', methods=['GET'])
+import trace
+@app.route('/dourldetect', methods=['GET', 'POST'])
+# Return The JSON Format Data to Frontend
+
+
+def dourldetect():
+    if 'user_id' in session:
+        try:
+            urlresult = trace.trace("https://www.baidu.com")
+        except:
+            return "some thing wrong happend"
+        replydata = {}
+        replydata['status'] = 1
+        replydata['message'] = 'OK'
+        add_log(session.get('user_id'), "dourldetect")
+        return jsonify(replydata)
+    else:
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
+
+
+@app.route('/dourlfetch', methods=['GET', 'POST'])
+# Return The JSON Format Data to Frontend
+def dourlfech():
+    if 'user_id' in session:
+        replydata = {}
+        replydata['status'] = 1
+        replydata['data'] = trace.trace("https://www.baidu.com")
+        add_log(session.get('user_id'), "dourlfetch")
+        return jsonify(replydata)
+    else:
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'no Authenticated'
+        return jsonify(replydata)
+
+@app.route('/magicsession', methods=['GET','POST'])
 def magicsession():
     session['user_id'] = 2
     data = {}

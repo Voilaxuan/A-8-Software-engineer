@@ -31,7 +31,7 @@
                 <label for="selected_file">Select File:</label>
                 <select name="selected_file" id="selected_file">
                     {% for file in files %}
-                        <option value="{{ file.filename }}">{{ file.filename }}</option>
+                        <option value="{{ file.filevalue }}">{{ file.filename }}</option>
                     {% endfor %}
                 </select>
                 <button type="submit" name="cheak" value="error_check">Error Check</button>
