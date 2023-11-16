@@ -120,7 +120,7 @@ def doupload():
             return jsonify(replydata)
 
         if file:
-            filename = file.filename
+            filename =  file.filename
             # 获取用户ID
             user_id = session.get('user_id')
 
