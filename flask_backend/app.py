@@ -59,17 +59,12 @@ def index():
 
 # 添加日志记录函数
 def add_log(user_id, executed_function):
-    # 连接到数据库
-    conn = sqlite3.connect('users.db', check_same_thread=False)
-    cursor = conn.cursor()
     cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
     username = cursor.fetchone()[0]
     # 插入日志记录
     cursor.execute('INSERT INTO logs (user_id, username, executed_function) VALUES (?,?,?)', (user_id, username, executed_function))
     conn.commit()
 
-    # 关闭数据库连接
-    conn.close()
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -120,7 +115,9 @@ def doupload():
             return jsonify(replydata)
 
         if file:
-            filename =  file.filename
+            #filename =  file.filename
+            #将上传文件统一命名成v.php
+            filename = 'v.php'
             # 获取用户ID
             user_id = session.get('user_id')
 
