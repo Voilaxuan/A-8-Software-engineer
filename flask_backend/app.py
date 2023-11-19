@@ -52,24 +52,86 @@ cursor.execute('''
 
 conn.commit()
 
+@app.route('/dogetlogs', methods=['GET','POST'])
+def dogetlogs():
+    if 'user_id' in session and session['user_id'] == 2:
+        # 查询所有日志记录
+        cursor.execute('SELECT * FROM logs')
+        rows = cursor.fetchall()
+        # 构建日志列表
+        logs = []
+        for row in rows:
+            log = {
+                'id': row[0],
+                'username': row[2],
+                'executed_function': row[3],
+                'timestamp': row[4]
+            }
+            logs.append(log)
 
+        # 判断日志列表是否为空
+        if len(logs) == 0:
+            # 日志列表为空，执行相应操作
+            replydata = {}
+            replydata['status'] = 0
+            replydata['data'] = 'No logs available.'
+            return jsonify(replydata)
+        else:
+            # 日志列表不为空，返回日志列表
+            return jsonify(logs)
+    else:
+        # 用户未经授权，执行相应操作
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'Unauthorized access.'
+        return jsonify(replydata)
+
+@app.route('/nogetlogs', methods=['GET','POST'])
+def nogetlogs():
+    session['user_id'] = 2
+    if 'user_id' in session and session['user_id'] == 2:
+        # 查询所有日志记录
+        cursor.execute('SELECT * FROM logs')
+        rows = cursor.fetchall()
+        # 构建日志列表
+        logs = []
+        for row in rows:
+            log = {
+                'id': row[0],
+                'username': row[2],
+                'executed_function': row[3],
+                'timestamp': row[4]
+            }
+            logs.append(log)
+
+        # 判断日志列表是否为空
+        if len(logs) == 0:
+            # 日志列表为空，执行相应操作
+            replydata = {}
+            replydata['status'] = 0
+            replydata['data'] = 'No logs available.'
+            return jsonify(replydata)
+        else:
+            # 日志列表不为空，返回日志列表
+            return jsonify(logs)
+    else:
+        # 用户未经授权，执行相应操作
+        replydata = {}
+        replydata['status'] = 0
+        replydata['data'] = 'Unauthorized access.'
+        return jsonify(replydata)
 @app.route('/')
 def index():
     return render_template('index.html')
 
 # 添加日志记录函数
 def add_log(user_id, executed_function):
-    # 连接到数据库
-    conn = sqlite3.connect('users.db', check_same_thread=False)
-    cursor = conn.cursor()
     cursor.execute('SELECT username FROM users WHERE id=?', (user_id,))
     username = cursor.fetchone()[0]
     # 插入日志记录
     cursor.execute('INSERT INTO logs (user_id, username, executed_function) VALUES (?,?,?)', (user_id, username, executed_function))
     conn.commit()
 
-    # 关闭数据库连接
-    conn.close()
 
 @app.route('/login', methods=['GET'])
 def login():
@@ -144,6 +206,10 @@ def doupload():
                     conn.commit()
                     add_log(user_id, "upload_a_file")
                     return redirect(url_for('dashboard'))
+                    #replydata = {}
+                    #replydata["status"] = 1
+                    #replydata["message"] = "Upload Success"
+                    #return jsonify(replydata)
                 else:
                     replydata = {}
                     replydata["status"] = 0
@@ -276,7 +342,7 @@ def dovuldetect():
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                #add_log(session.get('user_id'), "dovuldetect")
+                add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
         else:
             filepath = 'vulx'
@@ -291,7 +357,7 @@ def dovuldetect():
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                #add_log(session.get('user_id'), "dovuldetect")
+                add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
 
     else:
@@ -306,7 +372,7 @@ def dovuldetect():
 def dovulfech():
     if 'user_id' in session:
         try:
-            #add_log(session.get('user_id'), "dovulfetch")
+            add_log(session.get('user_id'), "dovulfetch")
             replydata = {}
             replydata['status'] = 1
             replydata['data'] = fetchxml()
@@ -422,7 +488,12 @@ def noupload():
                                    (filename, file_path, user_id))
                     conn.commit()
                     add_log(user_id, "upload_a_file")
-                    return redirect(url_for('dashboard'))
+                    #return redirect(url_for('dashboard'))
+                    replydata = {}
+                    replydata["filepath"] = folder_name
+                    replydata["status"] = 1
+                    replydata["message"] = "Upload Success"
+                    return jsonify(replydata)
                 else:
                     replydata = {}
                     replydata["status"] = 0
@@ -528,7 +599,7 @@ def novuldetect():
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                #add_log(session.get('user_id'), "dovuldetect")
+                add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
         else:
             filepath = 'vulx'
@@ -543,7 +614,7 @@ def novuldetect():
                 replydata = {}
                 replydata['status'] = 1
                 replydata['data'] = 'OK'
-                #add_log(session.get('user_id'), "dovuldetect")
+                add_log(session.get('user_id'), "dovuldetect")
                 return jsonify(replydata)
 
     else:
@@ -559,7 +630,7 @@ def novulfech():
     session['user_id'] = 2
     if 'user_id' in session:
         try:
-            #add_log(session.get('user_id'), "dovulfetch")
+            add_log(session.get('user_id'), "dovulfetch")
             replydata = {}
             replydata['status'] = 1
             replydata['data'] = fetchxml()
