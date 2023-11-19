@@ -2,6 +2,9 @@ import React from 'react'
 import axios from 'axios'
 import './index.less'
 import { Button, Form, Icon, Input, Table, Modal, Checkbox } from 'antd'
+import 'highlight.js/styles/default.css'
+import hljs from 'highlight.js'
+
 const baseURL = 'http://20.2.73.68:5003'
 class fileDetectionModal extends React.Component {
   // eslint-disable-next-line no-useless-constructor
@@ -13,11 +16,19 @@ class fileDetectionModal extends React.Component {
       visible: false,
       selectedFile: null,
       selectedFileOption: '', // 初始选中值为空
-      fileOptions: []
+      fileOptions: [],
+      fileContent: '',
+      jsonResult: '',
+      highlightedLine: null
     }
   }
   componentDidMount() {
     this.fetchFileOptions()
+    hljs.highlightAll()
+  }
+  componentDidUpdate() {
+    // 当组件更新时也高亮代码块
+    hljs.highlightAll()
   }
   fetchFileOptions = () => {
     fetch(baseURL + '/nogetfilelist', {
@@ -43,6 +54,19 @@ class fileDetectionModal extends React.Component {
   handleFileChange = event => {
     console.log('changchangechange')
     this.setState({ selectedFile: event.target.files[0] })
+
+    const file = event.target.files[0]
+    if (!file) {
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = this.handleShowFile
+    reader.readAsText(file) // 读取文件内容为文本
+  }
+  handleShowFile = event => {
+    const fileContent = event.target.result
+    this.setState({ fileContent })
   }
 
   handleUpload = () => {
@@ -120,9 +144,17 @@ class fileDetectionModal extends React.Component {
               // Check if the response status is 1 and data is "OK"
               //alert(data.toString());
               var jsonString = JSON.stringify(data)
-              alert('Code Vul Check Success!')
-              // var nameElement = document.getElementById('resulttext');
-              // nameElement.innerHTML = jsonString;
+              var nameElement = document.getElementById('resulttext')
+              nameElement.innerHTML = jsonString
+
+              this.setState({ jsonResult: jsonString })
+
+              this.setState({ fileContent: this.renderJsonResultWithFile() })
+
+              // var codeElement = document.getElementById('code-render');
+
+              // codeElement.innerHTML=this.renderJsonResultWithFile();
+              // alert('Code Vul Check Success!')
             })
             .catch(error => {
               // Handle errors
@@ -136,6 +168,52 @@ class fileDetectionModal extends React.Component {
         // Handle errors
         console.error('Error:', error)
       })
+    this.setState({ visible: false })
+  }
+
+  parseJsonResult = () => {
+    try {
+      const result = JSON.parse(this.state.jsonResult)
+      const firstKey = Object.keys(result.data)[0]
+      const vulnerabilitiesData = result.data[firstKey]
+      const vulnerabilities = vulnerabilitiesData.vulnerabilities.vul
+
+      // 创建一个以行号为键的对象，存储每行的分析内容
+      const highlights = vulnerabilities.reduce((acc, vul) => {
+        acc[vul.line_number.trim()] = vul.analysis
+        return acc
+      }, {})
+      console.log(highlights)
+      this.setState({ highlightedLine: highlights })
+
+      return highlights
+    } catch (error) {
+      console.error('Error parsing JSON result:', error)
+    }
+    return {}
+  }
+
+  renderJsonResultWithFile = () => {
+    this.parseJsonResult()
+    const { fileContent, highlightedLine } = this.state
+    const lines = fileContent.split('\n')
+
+    console.log('highlightedLine', highlightedLine)
+    return lines.map((line, index) => {
+      const lineNumber = (index + 1).toString()
+      const highlightInfo = highlightedLine[lineNumber] // 清除可能的空格
+      console.log('lineNumber.trim()', lineNumber.trim())
+      console.log('highlightInfo', highlightInfo)
+      const isHighlighted = Boolean(highlightInfo) // 如果行号在 highlightedLine 中，则为 true
+      const lineClass = isHighlighted ? 'highlighted' : ''
+      const title = isHighlighted ? highlightInfo : '' // 可以是分析内容或其他信息
+      console.log('lineClass', lineClass)
+      return (
+        <div key={lineNumber} className={`code-line ${lineClass}`} title={title}>
+          {line}
+        </div>
+      )
+    })
   }
 
   // 单击确定按钮提交表单
@@ -256,6 +334,26 @@ class fileDetectionModal extends React.Component {
             </Form.Item>
           </Form>
         </Modal>
+        <div className="file-content">
+          <h3>File Content:</h3>
+          <pre>
+            <code className="php" id="code-render">
+              {this.state.fileContent}
+            </code>
+          </pre>
+        </div>
+
+        <section>
+          <h2>Results</h2> <button id="clearresultcontentBtn">Clear Result Content</button>
+          <table border="1">
+            <tr>
+              <td>Result Form</td>
+            </tr>
+            <tr>
+              <td id="resulttext"></td>
+            </tr>
+          </table>
+        </section>
       </div>
     )
   }
