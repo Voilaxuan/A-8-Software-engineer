@@ -12,6 +12,7 @@ class fileDetectionModal extends React.Component {
     this.state = {
       visible: false,
       selectedFile: null,
+      selectedFileOption: '', // 初始选中值为空
       fileOptions: []
     }
   }
@@ -25,7 +26,15 @@ class fileDetectionModal extends React.Component {
       .then(response => response.json())
       .then(data => {
         if (data.status === 1) {
-          this.setState({ fileOptions: data.fileslist })
+          const newFileOptions = data.fileslist
+          this.setState({ fileOptions: newFileOptions }, () => {
+            // 确保有选项可选
+            if (newFileOptions.length > 0) {
+              const lastOptionValue = newFileOptions[newFileOptions.length - 1].filevalue
+              this.setState({ selectedFileOption: lastOptionValue })
+            }
+          })
+          console.log(data.fileslist)
         }
       })
       .catch(error => console.error('Error fetching code vul options:', error))
@@ -58,6 +67,10 @@ class fileDetectionModal extends React.Component {
       })
       .then(data => {
         console.log('File uploaded successfully:', data)
+        console.log('filename', data.filepath)
+        //更新选项
+        this.fetchFileOptions()
+
         // 处理上传成功逻辑
       })
       .catch(error => {
@@ -65,12 +78,16 @@ class fileDetectionModal extends React.Component {
         // 处理错误逻辑
       })
   }
+  handleSelectOptionChange = event => {
+    // 更新状态以反映用户选择的文件选项
+    this.setState({ selectedFileOption: event.target.value })
+  }
 
   handleCodeVulCheck = () => {
     // Get the selected option value
     var selectedOption = document.getElementById('fileSelect').value
 
-    console.log('path', '1b67c72a-695f-4c46-ae75-6ecfb4027f84')
+    console.log('path', selectedOption)
     // Make a POST request to /dovulfetch
     fetch(baseURL + '/novuldetect', {
       method: 'POST',
@@ -78,7 +95,9 @@ class fileDetectionModal extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        // filepath: selectedOption
         filepath: '1b67c72a-695f-4c46-ae75-6ecfb4027f84'
+        // "第35次提交: /20f9adbf-3f05-4fc5-ac0d-7bcfad583004/"
       })
     })
       .then(response => response.json())
@@ -223,7 +242,11 @@ class fileDetectionModal extends React.Component {
                         <input type="submit" value="Start Detection"/>
                         </FormItem>                */}
             <Form.Item {...formItemLayout} label="File List：">
-              <select id="fileSelect">
+              <select
+                id="fileSelect"
+                value={this.state.selectedFileOption}
+                onChange={this.handleSelectOptionChange}
+              >
                 {this.state.fileOptions.map(option => (
                   <option key={option.filevalue} value={option.filevalue}>
                     {option.filename}
@@ -232,15 +255,6 @@ class fileDetectionModal extends React.Component {
               </select>
             </Form.Item>
           </Form>
-          <form
-            action="http://20.2.73.68:5003/noupload"
-            method="post"
-            encType="multipart/form-data"
-          >
-            {/* <input type="text" name="username" /> */}
-            <input type="file" name="file" />
-            <input type="submit" value="Upload" />
-          </form>
         </Modal>
       </div>
     )
