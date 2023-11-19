@@ -3,9 +3,10 @@ import 'regenerator-runtime/runtime'
 import './index.less'
 import { Button, Form, Icon, Input, Table, Modal, Checkbox } from 'antd'
 
-const baseURL = 'http://20.2.73.68:5003/'
+const baseURL = 'http://20.2.73.68:5003'
 
 import Editor from './components/editor.jsx'
+import axios from 'axios'
 class codeTextDetectionModal extends React.Component {
   // eslint-disable-next-line no-useless-constructor
   temp_data
@@ -41,39 +42,43 @@ class codeTextDetectionModal extends React.Component {
     console.log('formdata', formdata)
     console.log(baseURL + 'magicsession')
 
-    const sessionReq = await fetch(baseURL + 'magicsession', {
+    // const sessionReq = fetch('/magicsession', {
+    const sessionReq = await axios(baseURL + '/magicsession', {
       method: 'get'
+      // withCredentials:true,
+      // mode: 'no-cors'
       // data:formdata
     }).then(
       res => {
-        console.log('response', res.json())
-        // return fetch.get(baseURL+"dovuldetect");
+        // console.log('response', res.json())
+        console.log('response', res)
       },
       error => {
         console.log('error', error)
       }
     )
 
-    const detectReq = await fetch(baseURL + 'dovuldetect', {
-      method: 'get',
-      // data:formdata
-      credentials: 'include'
-    }).then(
-      res => {
-        console.log('response', res.json())
-        // return fetch.get(baseURL+"dovuldetect");
-      },
-      error => {
-        console.log('error', error)
-      }
-    )
+    // const fileReq =await fetch(baseURL+'/dogetfilelist', {
+    //   method: 'post',
+    //   credentials: 'include'
+
+    // }).then(
+    //   res => {
+    //     console.log('response', res.json())
+    //     // return fetch.get(baseURL+"dovuldetect");
+
+    //   },
+    //   error => {
+    //     console.log('error', error)
+    //   }
+    // )
   }
 
   // 弹出框设置
   showModal = () => {
     this.setState({ visible: true })
   }
-  handleCancel = e => {
+  handleCancel = async e => {
     this.setState({ visible: false })
   }
 
