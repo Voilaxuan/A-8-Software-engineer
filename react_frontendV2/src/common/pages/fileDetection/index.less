@@ -1,0 +1,28 @@
+.center {
+  text-align: center;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.file-line {
+  /* 基础行样式 */
+}
+
+.highlight-line {
+  background-color: yellow; /* 高亮颜色 */
+  cursor: pointer;
+}
+
+.highlight-line:hover::after {
+  content: attr(title); /* 显示分析内容 */
+  /* 其他提示样式 */
+}
+.code-line.highlighted {
+  background-color: yellow; /* 您可以选择合适的高亮颜色 */
+}
+.highlighted {
+  background-color: yellow; /* 高亮颜色 */
+}
